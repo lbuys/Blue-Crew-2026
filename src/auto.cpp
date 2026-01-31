@@ -27,7 +27,7 @@ void list_btn_event_c(lv_event_t *e) {
     // Go through all lists and clear check from every button
     lv_obj_t *lists[] = { leftlist, rightlist, skillslist };
     for (int i = 0; i < 3; i++) {
-        uint32_t child_cnt = lv_obj_get_child_cnt(lists[i]);
+        uint32_t child_cnt = lv_obj_get_child_count(lists[i]);
         for (uint32_t j = 0; j < child_cnt; j++) {
             lv_obj_t *btn = lv_obj_get_child(lists[i], j);
             lv_obj_clear_state(btn, LV_STATE_CHECKED);
@@ -40,7 +40,7 @@ void list_btn_event_c(lv_event_t *e) {
 
 
 void create_btn(lv_obj_t *parent, const char *txt) { //Creates button with user data
-    lv_obj_t *btn = lv_list_add_btn(parent, NULL, txt);
+    lv_obj_t *btn = lv_list_add_button(parent, NULL, txt);
     lv_obj_add_flag(btn, LV_OBJ_FLAG_CHECKABLE);
     lv_obj_set_style_radius(btn, 10, LV_PART_MAIN);
     lv_obj_set_style_bg_color(btn, lv_color_hex(0x808080), LV_STATE_CHECKED);
@@ -109,11 +109,11 @@ static void UCLogoEventCb(lv_event_t * e) { //UC logo click back event
 void lvgl_initialize() {
     // Creates Main Screen
     lv_obj_t * main_screen = lv_obj_create(NULL);
-    lv_scr_load(main_screen);
+    lv_screen_load(main_screen);
 
     // LV_IMG_DECLARE(uc);    //              at the top
     // lv_obj_t* img = lv_img_create(lv_scr_act());  // Creates image object            moved to top
-    img = lv_img_create(main_screen);
+    img = lv_image_create(main_screen);
     LV_IMG_DECLARE(uc);
     lv_img_set_src(img, &uc);                  // Make UC logo
     lv_obj_add_flag(img, LV_OBJ_FLAG_CLICKABLE);
