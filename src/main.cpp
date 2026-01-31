@@ -1,5 +1,7 @@
 #include "main.h"
 #include "config.h"
+#include "auto.h"
+#include "lemlib/api.hpp"
 
 /**
  * A callback function for LLEMU's center button.
@@ -24,11 +26,32 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+ lvgl_initialize();
+    pros::Task lvgl_task(lvglTask);
+    chassis.calibrate(); // calibrate sensors
+    optical.set_led_pwm(100);
 
-	pros::lcd::register_btn1_cb(on_center_button);
+    // thread to for brain screen and position logging
+    // pros::lcd::initialize(); // initialize brain screen
+    // pros::Task screenTask([&]() {
+    //     while (true) {
+    //         // print robot location to the brain screen
+    //         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+    //         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+    //         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+    //         // log position telemetry
+    //         lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+    //         // delay to save resources
+    //         pros::delay(50);
+    //     }
+    // });
 }
+
+// get a path used for pure pursuit
+// this needs to be put outside a function
+ASSET(path_txt); // '.' replaced with "_" to make c++ happy
+
+
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -75,11 +98,7 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::MotorGroup left_mg({1, -2, 3});    // Creates a motor group with forwards ports 1 & 3 and reversed port 2
-	pros::MotorGroup right_mg({-4, 5, -6});  // Creates a motor group with forwards port 5 and reversed ports 4 & 6
-
-
+	
 	 while (true) {
         lv_timer_handler();
         // get joystick positions

@@ -3,13 +3,13 @@
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "liblvgl/core/lv_obj.h"
 #include "liblvgl/misc/lv_area.h"
-#include "liblvgl/widgets/lv_img.h"
+#include "liblvgl/widgets/image/lv_image.h"
 #include "pros/adi.hpp"
 #include "pros/motors.h"
 #include "pros/motors.hpp"
 #include "pros/optical.hpp"
 #include "pros/rotation.hpp"
-#include "custom.h"
+#include "auto.h"
 
 lv_obj_t *leftlist;
 lv_obj_t *rightlist;
