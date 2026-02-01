@@ -10,6 +10,9 @@
 #include "pros/optical.hpp"
 #include "pros/rotation.hpp"
 #include "auto.h"
+#include "uc.c"
+#include "red_uc.c"
+
 
 lv_obj_t *leftlist;
 lv_obj_t *rightlist;
@@ -91,16 +94,16 @@ static void UCLogoEventCb(lv_event_t * e) { //UC logo click back event
           lv_obj_set_style_bg_color(btnLeft, lv_color_hex(0xee2a36), LV_PART_MAIN); //Red
           lv_obj_set_style_bg_color(btnRight, lv_color_hex(0xee2a36), LV_PART_MAIN);
           lv_obj_set_style_bg_color(btnSkills, lv_color_hex(0xee2a36), LV_PART_MAIN);
-          LV_IMG_DECLARE(red_uc);
-          lv_img_set_src(img, &red_uc); // Print RED UC logo
+          LV_IMAGE_DECLARE(red_uc);
+          lv_image_set_src(img, &red_uc); // Print RED UC logo
         }
         else if (SelectedAlliance == RED){
           SelectedAlliance = BLUE;
           lv_obj_set_style_bg_color(btnLeft, lv_color_hex(0x003263), LV_PART_MAIN); //Blue
           lv_obj_set_style_bg_color(btnRight, lv_color_hex(0x003263), LV_PART_MAIN);
           lv_obj_set_style_bg_color(btnSkills, lv_color_hex(0x003263), LV_PART_MAIN);
-          LV_IMG_DECLARE(uc);
-          lv_img_set_src(img, &uc);  // Print BLUE UC logo
+          LV_IMAGE_DECLARE(uc);
+          lv_image_set_src(img, &uc);  // Print BLUE UC logo
         }
     }
 }
@@ -127,7 +130,7 @@ void lvgl_initialize() {
     // Creates three separate buttons at the bottom for, Left / Right / Skills
 
     // Left button
-    btnLeft = lv_btn_create(main_screen);
+    btnLeft = lv_button_create(main_screen);
     lv_obj_set_width(btnLeft, lv_pct(30));
     lv_obj_align(btnLeft, LV_ALIGN_BOTTOM_LEFT,  10, -10);
     lv_obj_add_flag(btnLeft, LV_OBJ_FLAG_CHECKABLE);
@@ -144,7 +147,7 @@ void lvgl_initialize() {
     lv_obj_add_state(btnLeft, LV_STATE_CHECKED);
 
     // Right button
-    btnRight = lv_btn_create(main_screen);
+    btnRight = lv_button_create(main_screen);
     lv_obj_set_width(btnRight, lv_pct(30));
     lv_obj_align(btnRight, LV_ALIGN_BOTTOM_MID, 0, -10);
     lv_obj_add_flag(btnRight, LV_OBJ_FLAG_CHECKABLE);
@@ -158,7 +161,7 @@ void lvgl_initialize() {
     lv_obj_add_event_cb(btnRight, RightEventCb, LV_EVENT_CLICKED, NULL);
 
     // Skills button
-    btnSkills = lv_btn_create(main_screen);
+    btnSkills = lv_button_create(main_screen);
     lv_obj_set_width(btnSkills, lv_pct(30));
     lv_obj_align(btnSkills, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
     lv_obj_add_flag(btnSkills, LV_OBJ_FLAG_CHECKABLE);
