@@ -791,12 +791,12 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_UC uint8_
 #endif
 };
 
-const lv_img_dsc_t uc = {
+const lv_image_dsc_t uc = {
   .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
   .header.always_zero = 0,
   .header.reserved = 0,
   .header.w = 267,
   .header.h = 189,
-  .data_size = 50463 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data_size = 50463 * LV_IMG_PX_SIZE_ALPHA_BYTE, // Assuming 4 bytes per pixel (ARGB); adjust if needed
   .data = uc_map,
 };

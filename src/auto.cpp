@@ -1,3 +1,4 @@
+#include "liblvgl/misc/lv_types.h"
 #include "main.h"
 #include "lemlib/api.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
@@ -25,7 +26,7 @@ lv_obj_t * list_group_t;
 lv_obj_t* img = nullptr;
 
 void list_btn_event_c(lv_event_t *e) {
-    lv_obj_t *clicked_btn = lv_event_get_target(e);
+    lv_obj_t * clicked_btn = (lv_obj_t*) lv_event_get_target(e);
 
     // Go through all lists and clear check from every button
     lv_obj_t *lists[] = { leftlist, rightlist, skillslist };
@@ -33,7 +34,7 @@ void list_btn_event_c(lv_event_t *e) {
         uint32_t child_cnt = lv_obj_get_child_count(lists[i]);
         for (uint32_t j = 0; j < child_cnt; j++) {
             lv_obj_t *btn = lv_obj_get_child(lists[i], j);
-            lv_obj_clear_state(btn, LV_STATE_CHECKED);
+            lv_obj_remove_state(btn, LV_STATE_CHECKED);
         }
     }
 
@@ -59,9 +60,9 @@ static void LeftEventCb(lv_event_t *e) { //Left click back event
     // lv_obj_clear_flag(leftlist, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(rightlist, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(skillslist, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_flag(leftlist, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_state(btnRight, LV_STATE_CHECKED);
-    lv_obj_clear_state(btnSkills, LV_STATE_CHECKED);
+    lv_obj_remove_flag(leftlist, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_remove_state(btnRight, LV_STATE_CHECKED);
+    lv_obj_remove_state(btnSkills, LV_STATE_CHECKED);
   }
 }
 static void RightEventCb(lv_event_t *e) { //Right click back event
@@ -70,9 +71,9 @@ static void RightEventCb(lv_event_t *e) { //Right click back event
     // lv_obj_clear_flag(leftlist, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(leftlist, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(skillslist, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_flag(rightlist, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_state(btnLeft, LV_STATE_CHECKED);
-    lv_obj_clear_state(btnSkills, LV_STATE_CHECKED);
+    lv_obj_remove_flag(rightlist, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_remove_state(btnLeft, LV_STATE_CHECKED);
+    lv_obj_remove_state(btnSkills, LV_STATE_CHECKED);
   }
 }
 static void SkillsEventCb(lv_event_t *e) { //Skills click back event
@@ -81,9 +82,9 @@ static void SkillsEventCb(lv_event_t *e) { //Skills click back event
     // lv_obj_clear_flag(leftlist, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(leftlist, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(rightlist, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_flag(skillslist, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_state(btnLeft, LV_STATE_CHECKED);
-    lv_obj_clear_state(btnRight, LV_STATE_CHECKED);
+    lv_obj_remove_flag(skillslist, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_remove_state(btnLeft, LV_STATE_CHECKED);
+    lv_obj_remove_state(btnRight, LV_STATE_CHECKED);
   }
 }
 
@@ -117,11 +118,12 @@ void lvgl_initialize() {
     // LV_IMG_DECLARE(uc);    //              at the top
     // lv_obj_t* img = lv_img_create(lv_scr_act());  // Creates image object            moved to top
     img = lv_image_create(main_screen);
-    LV_IMG_DECLARE(uc);
-    lv_img_set_src(img, &uc);                  // Make UC logo
+    LV_IMAGE_DECLARE(uc);
+    lv_image_set_src(img, &uc);                  // Make UC logo
     lv_obj_add_flag(img, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_align(img, LV_ALIGN_TOP_RIGHT, 22, 0);
-    lv_img_set_zoom(img, 200);
+    lv_obj_set_style_transform_scale(img, 200, 0);
+
     lv_obj_add_event_cb(img, UCLogoEventCb, LV_EVENT_CLICKED, NULL);
 
     lv_obj_set_style_bg_color(main_screen, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
@@ -194,7 +196,7 @@ void lvgl_initialize() {
 
     lv_obj_add_flag(rightlist, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(skillslist, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_clear_flag(main_screen, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_remove_flag(main_screen, LV_OBJ_FLAG_SCROLLABLE);
 
 
     /*-----------------------------------------------------------------------------------------------------------------------------------
@@ -227,7 +229,7 @@ const char* find_selected() {
     lv_obj_t* lists[] = { leftlist, rightlist, skillslist };
     for (int i = 0; i < 3; i++) {
         lv_obj_t* list = lists[i];
-        uint16_t child_cnt = lv_obj_get_child_cnt(list);
+        uint16_t child_cnt = lv_obj_get_child_count(list);
         for (uint16_t idx = 0; idx < child_cnt; idx++) {
             lv_obj_t* btn = lv_obj_get_child(list, idx);
             if (lv_obj_has_state(btn, LV_STATE_CHECKED)) {
