@@ -797,6 +797,6 @@ const lv_image_dsc_t uc = {
   .header.reserved = 0,
   .header.w = 267,
   .header.h = 189,
-  .data_size = 50463 * LV_IMG_PX_SIZE_ALPHA_BYTE, // Assuming 4 bytes per pixel (ARGB); adjust if needed
+  .data_size = 50463 * LV_IMG_PX_SIZE_ALPHA_BYTE, 
   .data = uc_map,
 };
