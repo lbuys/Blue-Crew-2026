@@ -1,3 +1,4 @@
+
 #ifdef __has_include
     #if __has_include("lvgl.h")
         #ifndef LV_LVGL_H_INCLUDE_SIMPLE
@@ -797,6 +798,6 @@ const lv_image_dsc_t uc = {
   .header.reserved = 0,
   .header.w = 267,
   .header.h = 189,
-  .data_size = 50463 * LV_IMG_PX_SIZE_ALPHA_BYTE, 
+  .data_size = 50463 * LV_IMG_PX_SIZE_ALPHA_BYTE,
   .data = uc_map,
 };

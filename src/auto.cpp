@@ -11,8 +11,8 @@
 #include "pros/optical.hpp"
 #include "pros/rotation.hpp"
 #include "auto.h"
-#include "uc.c"
-#include "red_uc.c"
+#include "Unity_Logo.c"
+#include "Red_Unity_Logo.c"
 
 
 lv_obj_t *leftlist;
@@ -95,16 +95,16 @@ static void UCLogoEventCb(lv_event_t * e) { //UC logo click back event
           lv_obj_set_style_bg_color(btnLeft, lv_color_hex(0xee2a36), LV_PART_MAIN); //Red
           lv_obj_set_style_bg_color(btnRight, lv_color_hex(0xee2a36), LV_PART_MAIN);
           lv_obj_set_style_bg_color(btnSkills, lv_color_hex(0xee2a36), LV_PART_MAIN);
-          LV_IMAGE_DECLARE(red_uc);
-          lv_image_set_src(img, &red_uc); // Print RED UC logo
+          LV_IMAGE_DECLARE(Red_Unity_Logo);
+          lv_image_set_src(img, &Red_Unity_Logo); // Print RED UC logo
         }
         else if (SelectedAlliance == RED){
           SelectedAlliance = BLUE;
           lv_obj_set_style_bg_color(btnLeft, lv_color_hex(0x003263), LV_PART_MAIN); //Blue
           lv_obj_set_style_bg_color(btnRight, lv_color_hex(0x003263), LV_PART_MAIN);
           lv_obj_set_style_bg_color(btnSkills, lv_color_hex(0x003263), LV_PART_MAIN);
-          LV_IMAGE_DECLARE(uc);
-          lv_image_set_src(img, &uc);  // Print BLUE UC logo
+          LV_IMAGE_DECLARE(Unity_Logo);
+          lv_image_set_src(img, &Unity_Logo);  // Print BLUE UC logo
         }
     }
 }
@@ -118,8 +118,8 @@ void lvgl_initialize() {
     // LV_IMG_DECLARE(uc);    //              at the top
     // lv_obj_t* img = lv_img_create(lv_scr_act());  // Creates image object            moved to top
     img = lv_image_create(main_screen);
-    LV_IMAGE_DECLARE(uc);
-    lv_image_set_src(img, &uc);                  // Make UC logo
+    LV_IMAGE_DECLARE(Unity_Logo);
+    lv_image_set_src(img, &Unity_Logo);                  // Make UC logo
     lv_obj_add_flag(img, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_align(img, LV_ALIGN_TOP_RIGHT, 22, 0);
     lv_obj_set_style_transform_scale(img, 200, 0);
