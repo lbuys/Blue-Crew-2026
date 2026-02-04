@@ -44,7 +44,7 @@ Use the UC Logo to change what color you are
 ## Author
 Blue Crew 
 
-<img width="1930" height="1365" alt="Unity_Logo" src="https://github.com/user-attachments/assets/218b5796-5c3d-4b36-aa98-1f600187c1dc" />
+<img width="482.5" height="341.25" alt="Unity_Logo" src="https://github.com/user-attachments/assets/218b5796-5c3d-4b36-aa98-1f600187c1dc" />
 
 
 
