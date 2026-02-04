@@ -16,7 +16,7 @@ This repository contains the code for our 2026 VEX V5 competition robot using PR
 4. download the project
 5. open the project in VS code as a pros file
 6. Install LemLib by pasting in the terminal:
-  pros c add-depot LemLib https://raw.githubusercontent.com/LemLib/LemLib/depot/stable.json # adds LemLib's stable depot
+  pros c add-depot LemLib https://raw.githubusercontent.com/LemLib/LemLib/depot/stable.json 
   pros c apply LemLib
 
 
