@@ -13,7 +13,9 @@
 #include "auto.h"
 #include "Unity_Logo.c"
 #include "Red_Unity_Logo.c"
-
+#include <cmath>
+#include <cstdint>
+#include <cstring>
 
 lv_obj_t *leftlist;
 lv_obj_t *rightlist;
@@ -211,6 +213,7 @@ void lvgl_initialize() {
     create_btn(rightlist, "low_middle");
     create_btn(leftlist, "high_middle");
     create_btn(skillslist, "skills_2");
+    create_btn(skillslist, "pid_tuner");
     // create_btn(rightlist, "wp");
 
     //-----------------------------------------------------------------------------------------------------------------------------------

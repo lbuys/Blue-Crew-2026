@@ -42,6 +42,11 @@ Use the LemLib functions to create autonomous paths
 Select autonomous routine on brain screen before match.
 Use the UC Logo to change what color you are
 
+## Custom.py
+This is the only python file it is not connected to any of the other documents.
+It uses its own custom odometry and PID drive it is very simple. We will work on this
+throughout the year and try to improve it so we can possibly use it for match use.
+
 ## Author
 Blue Crew 
 
