@@ -1,6 +1,8 @@
 #include "auto.h"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "config.h"
+#include "pros/distance.hpp"
+
 
 // Controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -15,9 +17,9 @@ pros::MotorGroup rightMotors({16, 14,13}, pros::MotorGearset::blue);
 // Sensors
 pros::Imu imu(19);
 pros::Optical optical(10);
-pros::Distance x_sensor1(20);
-pros::Distance x_sensor2(21);
-pros::Distance y_sensor(22);
+pros::Distance front_sensor1(20);
+pros::Distance front_sensor2(21);
+pros::Distance side_sensor(22);
 
 // Tracking Wheels
 // pros::Rotation horizontalEnc(11);

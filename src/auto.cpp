@@ -1,6 +1,4 @@
 #include "liblvgl/misc/lv_types.h"
-#include "main.h"
-#include "lemlib/api.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "liblvgl/core/lv_obj.h"
 #include "liblvgl/misc/lv_area.h"

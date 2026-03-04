@@ -5,44 +5,27 @@
 
 void distance_reset()
 {   int heading = imu.get_rotation();
+    int front1 = front_sensor1.get_distance();
+    int front2 = front_sensor2.get_distance();
+    int side_distance = side_sensor.get_distance();
+    int front_distance = (front1 + front2) / 2.0;
     
     if (heading == 0){
-        int x1 = x_sensor1.get_distance();
-        int x2 = x_sensor2.get_distance();
-        int y = y_sensor.get_distance();
-
-        int x_distance = (x1 + x2) / 2.0;
-
-        chassis.setPose(x_distance, y, chassis.getPose().theta);
+        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);
 
 }
     if (heading == 90){
-        int x1 = x_sensor1.get_distance();
-        int x2 = x_sensor2.get_distance();
-        int y = y_sensor.get_distance();
-
-        int x_distance = (x1 + x2) / 2.0;
-
-        chassis.setPose(x_distance, y, chassis.getPose().theta);
+        
+        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);
 
 }
     else if (heading == 180){
-        int x1 = x_sensor1.get_distance();
-        int x2 = x_sensor2.get_distance();
-        int y = y_sensor.get_distance();
-
-        int x_distance = (x1 + x2) / 2.0;
-
-        chassis.setPose(x_distance, y, chassis.getPose().theta);}
+        
+        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);}
 
     else if (heading == 270){
-        int x1 = x_sensor1.get_distance();
-        int x2 = x_sensor2.get_distance();
-        int y = y_sensor.get_distance();
-
-        int x_distance = (x1 + x2) / 2.0;
-
-        chassis.setPose(x_distance, y, chassis.getPose().theta);}
+        
+        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);}
 
     else {
         
