@@ -26,8 +26,13 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
- lvgl_initialize();
-    pros::Task lvgl_task(lvglTask);
+    lvgl_initialize();
+    static pros::Task lvgl_task([] {
+        while (true) {
+            lv_timer_handler();
+            pros::delay(5);
+        }
+    }, "LVGL");
     chassis.calibrate(); // calibrate sensors
     optical.set_led_pwm(100);
 
@@ -100,10 +105,10 @@ void autonomous() {}
 void opcontrol() {
 	
 	 while (true) {
-        lv_timer_handler();
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
+        pros::delay(10);
 }}

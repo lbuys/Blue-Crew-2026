@@ -16,11 +16,15 @@ extern pros::MotorGroup rightMotors;
 
 extern pros::Imu imu;
 extern pros::Optical optical;
+extern pros::Distance x_sensor1;
+extern pros::Distance x_sensor2;
+extern pros::Distance y_sensor;
 
 extern pros::Rotation verticalEnc;
 extern pros::Rotation horizontalEnc;
 extern lemlib::TrackingWheel vertical;
 extern lemlib::TrackingWheel horizontal;
+
 
 extern lemlib::Drivetrain drivetrain;
 
