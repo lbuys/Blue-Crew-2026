@@ -17,25 +17,26 @@ void distance_reset()
     
     if (-5 <= heading && heading <= 5){
         chassis.setPose(side_distance, front_distance, chassis.getPose().theta);
+    }
 
-}
     else if (85 <= heading && heading <= 95){
         
         chassis.setPose(front_distance, side_distance, chassis.getPose().theta);
-
-}
+    }
+    
     else if (175 <= heading && heading <= 185){
         
-        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);}
+        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);
+    }
 
     else if (265 <= heading && heading <= 275){
         
-        chassis.setPose(front_distance, side_distance, chassis.getPose().theta);}
+        chassis.setPose(front_distance, side_distance, chassis.getPose().theta);
+    }
 
     else {
         
         controller.print(0,0,"Heading not cardinal, cannot reset");
-    
     }
 }
 
