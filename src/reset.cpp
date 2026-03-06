@@ -10,28 +10,28 @@ void distance_reset()
     int front2_offset = 0; //offset for front sensor 2 in inches
     int side_offset = 0; //offset for side sensor in inches
     int heading = imu.get_rotation();
-    int front1 = (front_sensor1.get_distance() / 25.4) + front1_offset; //convert to inches and add offset
-    int front2 = (front_sensor2.get_distance() / 25.4) + front2_offset; //convert to inches and add offset
-    int side_distance = (side_sensor.get_distance() / 25.4) + side_offset; //convert to inches and add offset
-    int front_distance = (front1 + front2) / 2.0;
+    double front1 = (front_sensor1.get_distance() / 25.4) + front1_offset; //convert to inches and add offset
+    double front2 = (front_sensor2.get_distance() / 25.4) + front2_offset; //convert to inches and add offset
+    double side_distance = (side_sensor.get_distance() / 25.4) + side_offset; //convert to inches and add offset
+    int front_distance = (front1 + front2) / 2; //average the two front sensors for better accuracy
     
-    if (-5 <= heading && heading <= 5){
-        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);
+    if (355 <= heading && heading <= 5){
+        chassis.setPose(side_distance, front_distance, heading);
     }
 
     else if (85 <= heading && heading <= 95){
         
-        chassis.setPose(front_distance, side_distance, chassis.getPose().theta);
+        chassis.setPose(front_distance, side_distance, heading);
     }
-    
+
     else if (175 <= heading && heading <= 185){
         
-        chassis.setPose(side_distance, front_distance, chassis.getPose().theta);
+        chassis.setPose(side_distance, front_distance, heading);
     }
 
     else if (265 <= heading && heading <= 275){
         
-        chassis.setPose(front_distance, side_distance, chassis.getPose().theta);
+        chassis.setPose(front_distance, side_distance, heading);
     }
 
     else {
