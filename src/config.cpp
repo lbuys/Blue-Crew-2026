@@ -17,10 +17,10 @@ pros::MotorGroup rightMotors({16, 14,13}, pros::MotorGearset::blue);
 // Sensors
 pros::Imu imu(19);
 pros::Optical optical(10);
-pros::Distance front_sensor1(20);
-pros::Distance front_sensor2(21);
-pros::Distance side_sensor1(22);
-pros::Distance side_sensor2(23);
+pros::Distance front_sensor(20);
+pros::Distance back_sensor(21);
+pros::Distance left_sensor(22);
+pros::Distance right_sensor(23);
 
 // Tracking Wheels
 // pros::Rotation horizontalEnc(11);
