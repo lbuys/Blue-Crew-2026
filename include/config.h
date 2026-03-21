@@ -16,9 +16,10 @@ extern pros::MotorGroup rightMotors;
 
 extern pros::Imu imu;
 extern pros::Optical optical;
-extern pros::Distance front_sensor1;
-extern pros::Distance front_sensor2;
-extern pros::Distance side_sensor;
+extern pros::Distance front_sensor;
+extern pros::Distance back_sensor;
+extern pros::Distance left_sensor;
+extern pros::Distance right_sensor;
 
 extern pros::Rotation verticalEnc;
 extern pros::Rotation horizontalEnc;
