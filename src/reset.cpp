@@ -1,3 +1,4 @@
+#include "lemlib/pose.hpp"
 #include "main.cpp"
 #include "config.h"
 #include "config.cpp"
@@ -15,7 +16,9 @@
     int field_size = 144; //field size in inches, used for calculating position when facing certain directions
     
     
-    void distance_reset() {
+    void distance_tracking() {
+
+        lemlib::Pose pose = chassis.getPose();
         //get distance readings from each sensor and convert to inches
         double front_distance = (front_sensor.get_distance() / 25.4) + front_offset; //convert to inches and add offset
         double back_distance = (back_sensor.get_distance() / 25.4) + back_offset; //convert to inches and add offset
@@ -41,6 +44,14 @@
         double y4 = (-(field_size - back_distance) * sin(theta) + left_distance * cos(theta)); //calculate y position using back and left sensors
 
         double y = (y1 + y2 + y3 + y4) / 4; //average y positions for more accuracy
+
+        double adjustment_factor = 0.2; // factor for amount of correction applied to odom
+
+        double corrected_x = pose.x + (x - pose.x) * adjustment_factor; //calculate corrected x position
+        double corrected_y = pose.y + (y - pose.y) * adjustment_factor; //calculate corrected y position
+        chassis.setPose({static_cast<float>(corrected_x), static_cast<float>(corrected_y), static_cast<float>(pose.theta)}); //update chassis pose with corrected position
+
+
 
     }
 
