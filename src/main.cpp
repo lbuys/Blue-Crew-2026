@@ -2,6 +2,8 @@
 #include "config.h"
 #include "auto.h"
 #include "lemlib/api.hpp"
+#include "reset.h"
+
 
 /**
  * A callback function for LLEMU's center button.
@@ -26,6 +28,8 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+ distance_tracking(); // start distance tracking thread
+    pros::Task distance_tracking_task(distance_tracking); // create task for distance tracking
  lvgl_initialize();
     pros::Task lvgl_task((lvgl_task));
     chassis.calibrate(); // calibrate sensors

@@ -17,43 +17,58 @@
     
     
     void distance_tracking() {
-
-        lemlib::Pose pose = chassis.getPose();
-        //get distance readings from each sensor and convert to inches
-        double front_distance = (front_sensor.get_distance() / 25.4) + front_offset; //convert to inches and add offset
-        double back_distance = (back_sensor.get_distance() / 25.4) + back_offset; //convert to inches and add offset
-        double left_distance = (left_sensor.get_distance() / 25.4) + left_offset; //convert to inches and add offset
-        double right_distance = (right_sensor.get_distance() / 25.4) + right_offset; //convert to inches and add offset
-
-        //get current rotation from IMU and convert to radians
-        double theta_degrees = imu.get_rotation(); //get current rotation from IMU
-        double theta_radians = theta_degrees * (M_PI / 180); //convert to radians
-        double theta = theta_radians; //store in variable for easier use
+        while (true) {
         
-        //calculate x and y position using distance sensor readings and current heading
-        double x1 = (front_distance * cos(theta) + (field_size - right_distance) * sin(theta)); //calculate x position using front and right sensors
-        double x2 = (front_distance * cos(theta) - left_distance * sin(theta)); //calculate x position using front and left sensors
-        double x3 = (-(field_size - back_distance) * cos(theta) + (field_size - right_distance) * sin(theta)); //calculate x position using back and right sensors
-        double x4 = (-(field_size - back_distance) * cos(theta) - left_distance * sin(theta)); //calculate x position using back and left sensors
+            lemlib::Pose pose = chassis.getPose();
+            //get distance readings from each sensor and convert to inches
+            double front_distance = (front_sensor.get_distance() / 25.4) + front_offset; //convert to inches and add offset
+            double back_distance = (back_sensor.get_distance() / 25.4) + back_offset; //convert to inches and add offset
+            double left_distance = (left_sensor.get_distance() / 25.4) + left_offset; //convert to inches and add offset
+            double right_distance = (right_sensor.get_distance() / 25.4) + right_offset; //convert to inches and add offset
 
-        double x = (x1 + x2 + x3 + x4) / 4; //average x positions for more accuracy
+            //get current rotation from IMU and convert to radians
+            double theta_degrees = imu.get_rotation(); //get current rotation from IMU
+            double theta_radians = theta_degrees * (M_PI / 180); //convert to radians
+            double theta = theta_radians; //store in variable for easier use
+        
+            //calculate x and y position using distance sensor readings and current heading
+            double x1 = (front_distance * cos(theta) + (field_size - right_distance) * sin(theta)); //calculate x position using front and right sensors
+            double x2 = (front_distance * cos(theta) - left_distance * sin(theta)); //calculate x position using front and left sensors
+            double x3 = (-(field_size - back_distance) * cos(theta) + (field_size - right_distance) * sin(theta)); //calculate x position using back and right sensors
+            double x4 = (-(field_size - back_distance) * cos(theta) - left_distance * sin(theta)); //calculate x position using back and left sensors
 
-        double y1 = (front_distance * sin(theta) - (field_size - right_distance) * cos(theta)); //calculate y position using front and right sensors
-        double y2 = (front_distance * sin(theta) + left_distance * cos(theta)); //calculate y position using front and left sensors
-        double y3 = (-(field_size - back_distance) * sin(theta) - (field_size - right_distance) * cos(theta)); //calculate y position using back and right sensors
-        double y4 = (-(field_size - back_distance) * sin(theta) + left_distance * cos(theta)); //calculate y position using back and left sensors
+            double x = (x1 + x2 + x3 + x4) / 4; //average x positions for more accuracy
 
-        double y = (y1 + y2 + y3 + y4) / 4; //average y positions for more accuracy
+            double y1 = (front_distance * sin(theta) - (field_size - right_distance) * cos(theta)); //calculate y position using front and right sensors
+            double y2 = (front_distance * sin(theta) + left_distance * cos(theta)); //calculate y position using front and left sensors
+            double y3 = (-(field_size - back_distance) * sin(theta) - (field_size - right_distance) * cos(theta)); //calculate y position using back and right sensors
+            double y4 = (-(field_size - back_distance) * sin(theta) + left_distance * cos(theta)); //calculate y position using back and left sensors
 
-        double adjustment_factor = 0.2; // factor for amount of correction applied to odom
+            double y = (y1 + y2 + y3 + y4) / 4; //average y positions for more accuracy
 
-        double corrected_x = pose.x + (x - pose.x) * adjustment_factor; //calculate corrected x position
-        double corrected_y = pose.y + (y - pose.y) * adjustment_factor; //calculate corrected y position
-        chassis.setPose({static_cast<float>(corrected_x), static_cast<float>(corrected_y), static_cast<float>(pose.theta)}); //update chassis pose with corrected position
+            double adjustment_factor = 0.2; // factor for amount of correction applied to odom
 
+            bool valid_reading =
+                (front_distance > 0 && front_distance < field_size) &&
+                (back_distance > 0 && back_distance < field_size) &&
+                (left_distance > 0 && left_distance < field_size) &&
+                (right_distance > 0 && right_distance < field_size);
+            
+                if (valid_reading){//only update pose if all sensor readings are valid to prevent incorrect position updates
+                
+                    double errorx = x - pose.x;
+                    double errory = y - pose.y;
+                    if (errorx < 12 && errory < 12) { //only apply correction if error is less than 12 inches to prevent large incorrect corrections
+                        double corrected_x = pose.x + (x - pose.x) * adjustment_factor; //calculate corrected x position
+                        double corrected_y = pose.y + (y - pose.y) * adjustment_factor; //calculate corrected y position
+                        chassis.setPose({static_cast<float>(corrected_x), static_cast<float>(corrected_y), static_cast<float>(pose.theta)}); //update chassis pose with corrected position
+                    }
+                }
 
+            pros::delay(30); //delay to prevent excessive CPU usage
 
     }
+}
 
     
 
