@@ -65,9 +65,6 @@
                         chassis.setPose({static_cast<float>(corrected_x), static_cast<float>(corrected_y), static_cast<float>(pose.theta)}); //update chassis pose with corrected position
                     }
                 }
-
-            pros::delay(30); //delay to prevent excessive CPU usage
-
     }
 }
 

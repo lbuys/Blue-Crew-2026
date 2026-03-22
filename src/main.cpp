@@ -27,11 +27,23 @@ void on_center_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+void distance_tracking_task() {
+    while(true) {
+        distance_tracking();
+        pros::delay(30); //delay to prevent excessive CPU usage
+    }
+}
+void lvgl_task() {
+    while (true) {
+        lv_timer_handler(); // Handle LVGL tasks
+        pros::delay(5); // Small delay to prevent CPU hogging
+    }
+}
 void initialize() {
- distance_tracking(); // start distance tracking thread
-    pros::Task distance_tracking_task(distance_tracking); // create task for distance tracking
- lvgl_initialize();
-    pros::Task lvgl_task((lvgl_task));
+
+    lvgl_initialize();
+    pros::Task distance_tracking_task(distance_tracking_task); // create task for distance tracking
+    pros::Task lvgl_task(lvgl_task);
     chassis.calibrate(); // calibrate sensors
     optical.set_led_pwm(100);
 
