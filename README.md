@@ -4,16 +4,17 @@ This repository contains the code for our 2026 VEX V5 competition robot using PR
 
 ## Features
 - Odometry tracking
+- Distance Sensor Tracking
 - Autonomous path following
 - Custom LVGL auton selector
 - Driver control system
   
 ## Setup
-1. install VS code
+1. Install VS code
 2. Dowload the PROS extension
 3. Download the Clangd extension
-4. download the project
-5. open the project in VS code as a pros file
+4. Download the project
+5. Open the project in VS code as a pros file
 6. Install LemLib by pasting in the terminal:
   pros c add-depot LemLib https://raw.githubusercontent.com/LemLib/LemLib/depot/stable.json 
   pros c apply LemLib
@@ -27,8 +28,9 @@ To best use this code you should have a basic understanding of how it works you 
 ## File Structure
 **src/**
  - main.cpp
- - auton.cpp
+ - auto.cpp
  - config.cpp
+ - reset.cpp
  - Unity_Logo.c #for auton selector
  - Unity_Logo_red.c #for auton selector
 
@@ -36,6 +38,7 @@ To best use this code you should have a basic understanding of how it works you 
  - auton.h
  - config.h
  - main.h
+ - reset.h
 
 ## Usage
 Use the LemLib functions to create autonomous paths 

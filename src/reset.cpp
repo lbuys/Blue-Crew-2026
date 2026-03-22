@@ -8,7 +8,7 @@
 
     //Constants
     //offsets for calibrating distance sensors
-    int front_offset = 0; //offset for front sensor 1 in inches
+    int front_offset = 0; //offset for front sensor in inches
     int back_offset = 0; //offset for back sensor in inches
     int left_offset = 0; //offset for left sensor in inches
     int right_offset = 0; //offset for right sensor in inches
@@ -48,7 +48,7 @@
 
             double adjustment_factor = 0.2; // factor for amount of correction applied to odom
 
-            bool valid_reading =
+            bool valid_reading = //check if all sensor readings are valid (greater than 0 and less than field size)
                 (front_distance > 0 && front_distance < field_size) &&
                 (back_distance > 0 && back_distance < field_size) &&
                 (left_distance > 0 && left_distance < field_size) &&
@@ -56,8 +56,9 @@
             
                 if (valid_reading){//only update pose if all sensor readings are valid to prevent incorrect position updates
                 
-                    double errorx = x - pose.x;
-                    double errory = y - pose.y;
+                    double errorx = x - pose.x;// calculate error between calculated position and odometry position
+                    double errory = y - pose.y;// calculate error between calculated position and odometry position
+                    
                     if (errorx < 12 && errory < 12) { //only apply correction if error is less than 12 inches to prevent large incorrect corrections
                         double corrected_x = pose.x + (x - pose.x) * adjustment_factor; //calculate corrected x position
                         double corrected_y = pose.y + (y - pose.y) * adjustment_factor; //calculate corrected y position
