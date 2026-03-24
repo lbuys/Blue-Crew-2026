@@ -46,7 +46,7 @@
 
             double y = (y1 + y2 + y3 + y4) / 4; //average y positions for more accuracy
 
-            double adjustment_factor = 0.2; // factor for amount of correction applied to odom
+            double adjustment_factor;
 
             bool valid_reading = //check if all sensor readings are valid (greater than 0 and less than field size)
                 (front_distance > 0 && front_distance < field_size) &&
@@ -58,13 +58,27 @@
                 
                     double errorx = x - pose.x;// calculate error between calculated position and odometry position
                     double errory = y - pose.y;// calculate error between calculated position and odometry position
+
+
                     
                     if (-12 < errorx && errorx < 12 && -12 < errory && errory < 12) { //only apply correction if error is less than 12 inches to prevent large incorrect corrections
+                        
+                        if(errorx > -1 && errorx < 1 && errory > -1 && errory < 1){ //if error is less than 1 inch in either direction, set adjustment factor to 0 to prevent jitter
+                            adjustment_factor = 0.5;
+                        }
+                        else if(errorx > -5 && errorx < 5 && errory > -5 && errory < 5){ //if error is less than 1 inch in either direction, set adjustment factor to 0 to prevent jitter
+                            adjustment_factor = 0.25;
+                        }
+                        else{
+                            adjustment_factor = 0.1; //adjustment factor for correcting position, can be tuned for better performance
+                        }
+                        
                         double corrected_x = pose.x + (x - pose.x) * adjustment_factor; //calculate corrected x position
                         double corrected_y = pose.y + (y - pose.y) * adjustment_factor; //calculate corrected y position
                         chassis.setPose({static_cast<float>(corrected_x), static_cast<float>(corrected_y), static_cast<float>(theta)}); //update chassis pose with corrected position
                     }
                 }
+                else return;
     }
 
     // for when robot is in an alligned position on the field only resets once and fully trusts sensors
