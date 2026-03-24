@@ -62,6 +62,8 @@
 extern "C" {
 #endif
 void autonomous(void);
+void distance_tracking_task(void);
+void lvgl_task(void);
 void initialize(void);
 void disabled(void);
 void competition_initialize(void);

@@ -116,6 +116,7 @@ void lvgl_initialize() {
     lv_obj_t * main_screen = lv_obj_create(NULL);
     lv_screen_load(main_screen);
 
+
     // LV_IMG_DECLARE(uc);    //              at the top
     // lv_obj_t* img = lv_img_create(lv_scr_act());  // Creates image object            moved to top
     img = lv_image_create(main_screen);

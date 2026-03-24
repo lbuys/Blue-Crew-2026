@@ -42,6 +42,7 @@ void lvgl_task() {
 void initialize() {
 
     lvgl_initialize();
+    get_starting_position(); // set starting position based on distance sensors
     pros::Task distance_tracking_task(distance_tracking_task); // create task for distance tracking
     pros::Task lvgl_task(lvgl_task);
     chassis.calibrate(); // calibrate sensors
