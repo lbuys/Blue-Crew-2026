@@ -14,6 +14,9 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 // Motor groups
 pros::MotorGroup leftMotors({-18,-20, -17}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({16, 14,13}, pros::MotorGearset::blue);
+pros::Motor lift_11W(11, pros::MotorGearset::blue, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor lift_half(12, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
+
 
 // Sensors
 pros::Imu imu(19);
@@ -22,6 +25,7 @@ pros::Distance front_sensor(20);
 pros::Distance back_sensor(21);
 pros::Distance left_sensor(22);
 pros::Distance right_sensor(23);
+pros::Rotation liftenc(11);
 
 // Tracking Wheels
 // pros::Rotation horizontalEnc(11);
