@@ -17,15 +17,12 @@ double Kd = 0;
 double dt = 0.02;
 int liftStage = 0;
 int previous_height = 0;
+liftenc.reset_position();
 
-void getposition()
-    while true:
-    current_height = liftenc.get_position();
-    delay(20); 
 
 void lift_PID(){
     while true:
-        getposition();
+        liftenc.get_position();
          //Calculate deltas to the current target point
         double delta_height = target_height - current_height;
 
