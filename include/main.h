@@ -64,6 +64,10 @@ extern "C" {
 void autonomous(void);
 void distance_tracking_task(void);
 void lvgl_task(void);
+void intake_task(void);
+void lift_PID_Task(void);
+void lift_movement_up_Task(void);
+void lift_movement_down_Task(void);
 void initialize(void);
 void disabled(void);
 void competition_initialize(void);

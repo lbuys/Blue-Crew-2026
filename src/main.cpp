@@ -27,24 +27,46 @@ void on_center_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void distance_tracking_task() {
-    while(true) {
-        distance_tracking();
-        pros::delay(30); //delay to prevent excessive CPU usage
-    }
-}
+
 void lvgl_task() {
     while (true) {
         lv_timer_handler(); // Handle LVGL tasks
         pros::delay(5); // Small delay to prevent CPU hogging
     }
 }
+void intake_task(){
+    while (true) {
+
+    }
+}
+void lift_PID_Task() {
+    while (true) {
+        lift_PID(); // Call the lift PID control function
+    }}
+
+void lift_movement_up_Task() {
+    while (true) {
+        lift_movement_up(); // Call the lift movement up function
+        pros::delay(20); // Delay for 20 milliseconds
+    }
+}
+
+void lift_movement_down_Task() {
+    while (true) {
+        lift_movement_down(); // Call the lift movement down function
+        pros::delay(20); // Delay for 20 milliseconds
+    }
+}
+
 void initialize() {
 
     lvgl_initialize();
     get_starting_position(); // set starting position based on distance sensors
-    pros::Task distance_tracking_task(distance_tracking_task); // create task for distance tracking
     pros::Task lvgl_task(lvgl_task);
+    pros::Task intake_task(intake_task);
+    pros::Task lift_PID_Task(lift_PID_Task);
+    pros::Task lift_movement_up_Task(lift_movement_up_Task);
+    pros::Task lift_movement_down_Task(lift_movement_down_Task);
     chassis.calibrate(); // calibrate sensors
     optical.set_led_pwm(100);
 
