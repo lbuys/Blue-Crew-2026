@@ -24,6 +24,7 @@ To best use this code you should have a basic understanding of how it works you 
 - [PROS Documentation](https://wiki.purduesigbots.com/software/odometry)
 - [LemLib Documentation](https://lemlib.readthedocs.io/en/stable/tutorials/1_getting_started.html)
 - [LemLib Movements in Depth](https://www.aadishv.dev/move2pointx)
+- [10B LemLib Overview](https://www.youtube.com/watch?v=JDt0iOA2BPg)
 
 ## File Structure
 **src/**
