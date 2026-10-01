@@ -12,26 +12,25 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 
 // Motor groups
-pros::MotorGroup leftMotors({-18,-20, -17}, pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({16, 14,13}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({3,4, 5}, pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({8, 9,10}, pros::MotorGearset::blue);
 pros::Motor lift_11W(11, pros::MotorGearset::blue, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor lift_half(12, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor lift_half(1, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor scoring_mech(9, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
 // Sensors
 pros::Imu imu(19);
-pros::Optical optical(10);
 pros::Distance front_sensor(20);
-pros::Distance back_sensor(21);
 pros::Distance left_sensor(22);
 pros::Distance right_sensor(23);
-pros::Rotation liftenc(11);
+pros::Rotation liftenc(12,E_MOTOR_ENCODER_DEGREES);
 
 // Tracking Wheels
-// pros::Rotation horizontalEnc(11);
-pros::Rotation verticalEnc(15);
-// lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -6.5);
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, .421875);
+pros::rotation verticalenc(6, true);
+pros::rotation horizontalenc(7, false);
+lemlib::TrackingWheel vertical(&verticalenc, lemlib::Omniwheel::NEW_2, 6.5);
+lemlib::TrackingWheel horizontal(&horizontalenc, lemlib::Omniwheel::NEW_2, -6.5);
 
 // Drivetrain Settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups

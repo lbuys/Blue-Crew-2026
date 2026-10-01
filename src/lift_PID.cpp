@@ -18,11 +18,12 @@ double dt = 0.02;
 int liftStage = 0;
 int previous_height = 0;
 liftenc.reset_position();
+double target_height = liftpositions[liftStage];
 
 
-void lift_PID(){
+void lift_PID() {
     while true:
-        liftenc.get_position();
+        current_height = liftenc.get_position();
          //Calculate deltas to the current target point
         double delta_height = target_height - current_height;
 
@@ -98,3 +99,7 @@ void lift_movement_down() {
         pros::delay(10);
     }
 }
+
+void score()
+{
+    }
