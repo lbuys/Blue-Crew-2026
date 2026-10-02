@@ -29,8 +29,8 @@ pros::Distance right_sensor(23);
 pros::Rotation liftenc(12,E_MOTOR_ENCODER_DEGREES);
 
 // Tracking Wheels
-pros::rotation verticalenc(6, true);
-pros::rotation horizontalenc(7, false);
+pros::Rotation verticalenc(6, true);
+pros::Rotation horizontalenc(7, false);
 lemlib::TrackingWheel vertical(&verticalenc, lemlib::Omniwheel::NEW_2, 6.5);
 lemlib::TrackingWheel horizontal(&horizontalenc, lemlib::Omniwheel::NEW_2, -6.5);
 
