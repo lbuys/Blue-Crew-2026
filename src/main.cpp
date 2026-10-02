@@ -43,7 +43,7 @@ void lift_movement_down_task() {
     while (true) {
         lift_movement_down(); // Call the lift movement down function
     }
-
+}
 void initialize() {
     chassis.calibrate(); // calibrate sensors
     lvgl_initialize();
