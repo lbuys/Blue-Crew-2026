@@ -16,7 +16,7 @@ extern pros::MotorGroup rightMotors;
 extern pros::Motor lift_11W;
 extern pros::Motor lift_half;
 extern pros::Motor scoring_mech;
-extern pros::adi::digital_out score;
+extern pros::adi::digital_out scorepiston;
 
 extern pros::Imu imu;
 

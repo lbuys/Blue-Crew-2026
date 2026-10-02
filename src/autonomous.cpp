@@ -1,4 +1,4 @@
-#include "custom.h"
+#include "auto.h"
 #include "config.h"
 #include "pros/motors.h"
 #include "pros/rtos.hpp"

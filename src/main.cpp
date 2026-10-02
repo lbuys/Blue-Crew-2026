@@ -51,14 +51,14 @@ void scorer_roller_task() {
 }
 
 void initialize() {
-
+    chassis.calibrate(); // calibrate sensors
     lvgl_initialize();
-    get_starting_position(); // set starting position based on distance sensors
+    //get_starting_position(); // set starting position based on distance sensors
     pros::Task lvgl_task(lvgl_task);
     pros::Task intake_task(intake_task);
     pros::Task lift_PID_Task(lift_PID_Task);
     pros::Task scorer_roller_task(scorer_roller_task);
-    chassis.calibrate(); // calibrate sensors
+    
 
     // thread to for brain screen and position logging
     // pros::lcd::initialize(); // initialize brain screen
@@ -124,7 +124,7 @@ void autonomous() {
 
 void opcontrol() {
 
-    bool score = false;
+    bool scorepiston = false;
 	
 	 while (true) {
         lv_timer_handler();

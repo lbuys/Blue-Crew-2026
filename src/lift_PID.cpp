@@ -121,7 +121,7 @@ void scoring_roller() {
 }
 void score()
 { 
-    score.set_value(false);
+    scorepiston.set_value(false);
     score_direction::score;
     pros::delay(500);
     score_direction::hold;

@@ -1,7 +1,5 @@
 #include "lemlib/pose.hpp"
-#include "main.cpp"
 #include "config.h"
-#include "config.cpp"
 #include <sys/_intsup.h>
 #include "reset.h"
 #include "pros/distance.hpp"

@@ -14,7 +14,6 @@
 #include <cmath>
 #include <cstdint>
 #include <cstring>
-#include "reset.cpp"
 
 lv_obj_t *leftlist;
 lv_obj_t *rightlist;
