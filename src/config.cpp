@@ -9,14 +9,16 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Motors and Pistons
+pros::Motor lift_11W(11, pros::MotorGearset::blue, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor lift_half(1, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor scoring_mech(6, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::adi::digital_out score('A');
+
 
 
 // Motor groups
 pros::MotorGroup leftMotors({3,4, 5}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({8, 9,10}, pros::MotorGearset::blue);
-pros::Motor lift_11W(11, pros::MotorGearset::blue, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor lift_half(1, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor scoring_mech(9, pros::MotorGearset::green, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
 // Sensors

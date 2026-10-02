@@ -23,6 +23,12 @@ double target_height = liftpositions[liftStage];
 
 void lift_PID() {
     while true:
+        
+        // flip scoring mech out if lift is above store position
+        if (liftStage > 0){
+            score.set_value(true);
+        }
+        
         current_height = liftenc.get_position();
          //Calculate deltas to the current target point
         double delta_height = target_height - current_height;
@@ -99,7 +105,29 @@ void lift_movement_down() {
         pros::delay(10);
     }
 }
-
+void scoring_roller() {
+    while (true) {
+        if (direction == score_direction::score){
+            scoring_mech.move_velocity(100);
+        }
+        else if (direction == score_direction::hold){
+            scoring_mech.move_velocity(-100);
+        }
+        else if (direction == score_direction::off){
+            scoring_mech.move_velocity(0);
+        }
+        pros::delay(50);
+    }
+}
 void score()
-{
+{ 
+    score.set_value(false);
+    score_direction::score;
+    pros::delay(500);
+    score_direction::hold;
+    target_height = current_height + 50;
+    pros::delay(50);
+    score.set_value(true);
+    score_direction::off;
+
     }

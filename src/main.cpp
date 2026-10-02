@@ -44,17 +44,9 @@ void lift_PID_Task() {
         lift_PID(); // Call the lift PID control function
     }}
 
-void lift_movement_up_Task() {
+void scorer_roller_task() {
     while (true) {
-        lift_movement_up(); // Call the lift movement up function
-        pros::delay(20); // Delay for 20 milliseconds
-    }
-}
-
-void lift_movement_down_Task() {
-    while (true) {
-        lift_movement_down(); // Call the lift movement down function
-        pros::delay(20); // Delay for 20 milliseconds
+        scoring_roller(); // Call the scoring roller function
     }
 }
 
@@ -65,10 +57,8 @@ void initialize() {
     pros::Task lvgl_task(lvgl_task);
     pros::Task intake_task(intake_task);
     pros::Task lift_PID_Task(lift_PID_Task);
-    pros::Task lift_movement_up_Task(lift_movement_up_Task);
-    pros::Task lift_movement_down_Task(lift_movement_down_Task);
+    pros::Task scorer_roller_task(scorer_roller_task);
     chassis.calibrate(); // calibrate sensors
-    optical.set_led_pwm(100);
 
     // thread to for brain screen and position logging
     // pros::lcd::initialize(); // initialize brain screen
@@ -133,8 +123,7 @@ void autonomous() {}
 
 void opcontrol() {
 
-    bool score1 = true;
-    bool score2 = true;
+    bool score = false;
 	
 	 while (true) {
         lv_timer_handler();
@@ -143,6 +132,11 @@ void opcontrol() {
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
+
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
+            score();
+        }
+        
 }}
 
-    
+
