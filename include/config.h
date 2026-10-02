@@ -13,9 +13,13 @@ extern pros::Controller controller;
 
 extern pros::MotorGroup leftMotors;
 extern pros::MotorGroup rightMotors;
+extern pros::Motor lift_11W;
+extern pros::Motor lift_half;
+extern pros::Motor scoring_mech;
+extern pros::adi::digital_out score;
 
 extern pros::Imu imu;
-extern pros::Optical optical;
+
 extern pros::Distance front_sensor;
 extern pros::Distance back_sensor;
 extern pros::Distance left_sensor;

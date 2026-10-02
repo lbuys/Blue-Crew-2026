@@ -40,7 +40,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups
                               10.344, // track width
                               lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
                               480, // drivetrain rpm
-                              5 // horizontal drift is 2. If we had traction wheels, it would have been 8
+                              2 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
 // Lateral Motion Controller
@@ -70,7 +70,7 @@ lemlib::ControllerSettings angularController(.8, // proportional gain (kP)
 // Sensors For Odometry
 lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
                             nullptr,
-                            nullptr, // horizontal tracking wheel
+                            &horizontal, // horizontal tracking wheel
                             nullptr,
                             &imu // inertial sensor
 );

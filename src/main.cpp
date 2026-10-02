@@ -111,15 +111,16 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
 
- if (SelectedAlliance == BLUE) {
+    if (SelectedAlliance == BLUE) {
         controller.print(0, 0, "BLUE");
     }
     else if (SelectedAlliance == RED){
         controller.print(0, 0, "RED");
     }
     get_selected_auton();
+}
 
 void opcontrol() {
 
@@ -136,7 +137,7 @@ void opcontrol() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
             score();
         }
-        
+
 }}
 
 
