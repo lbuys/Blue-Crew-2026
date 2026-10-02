@@ -49,6 +49,15 @@ void scorer_roller_task() {
         scoring_roller(); // Call the scoring roller function
     }
 }
+void lift_movement_up_task() {
+    while (true) {
+        lift_movement_up(); // Call the lift movement up function
+    }
+}
+void lift_movement_down_task() {
+    while (true) {
+        lift_movement_down(); // Call the lift movement down function
+    }
 
 void initialize() {
     chassis.calibrate(); // calibrate sensors
@@ -58,6 +67,8 @@ void initialize() {
     pros::Task intake_task(intake_task);
     pros::Task lift_PID_Task(lift_PID_Task);
     pros::Task scorer_roller_task(scorer_roller_task);
+    pros::Task lift_movement_up_task(lift_movement_up_task);
+    pros::Task lift_movement_down_task(lift_movement_down_task);
     
 
     // thread to for brain screen and position logging
@@ -78,7 +89,7 @@ void initialize() {
 
 // get a path used for pure pursuit
 // this needs to be put outside a function
-ASSET(path_txt); // '.' replaced with "_" to make c++ happy
+//ASSET(path_txt); // '.' replaced with "_" to make c++ happy
 
 
 

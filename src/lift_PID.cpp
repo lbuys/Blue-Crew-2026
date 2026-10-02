@@ -10,7 +10,7 @@ double liftpositions[8] = {
     600,  // Position 6
     700   // Position 7
 
-}
+};
 
 double Kp = 0.5;
 double Kd = 0;
@@ -22,7 +22,7 @@ double target_height = liftpositions[liftStage];
 
 
 void lift_PID() {
-    while true:
+    while (true) {
         
         // flip scoring mech out if lift is above store position
         if (liftStage > 0){
@@ -41,10 +41,10 @@ void lift_PID() {
         lift_11W.move_velocity(speed);
         lift_half.move_velocity(speed);
 
-        double previous_height = current_height;
+        previous_height = current_height;
         delay(20);  // Delay for 20 milliseconds 
 
-}
+}}
 
 
 
@@ -65,10 +65,10 @@ void lift_movement_up() {
 
             liftStage++;
 
-            if (liftStage > 8)
-                liftStage = 8;
+            if (liftStage > 7)
+                liftStage = 7;
 
-            target_height = liftPositions[liftStage];
+            target_height = liftpositions[liftStage];
         }
 
         lastPressed = pressed;
@@ -97,7 +97,7 @@ void lift_movement_down() {
             if (liftStage < 0)
                 liftStage = 0;
 
-            target_height = liftPositions[liftStage];
+            target_height = liftpositions[liftStage];
         }
 
         lastPressed = pressed;
@@ -124,10 +124,10 @@ void score()
     scorepiston.set_value(false);
     score_direction::score;
     pros::delay(500);
-    score_direction::hold;
+    diretion = score_direction::hold;
     target_height = current_height + 50;
     pros::delay(50);
-    score.set_value(true);
-    score_direction::off;
+    scorepiston.set_value(true);
+    direction = score_direction::off;
 
     }
