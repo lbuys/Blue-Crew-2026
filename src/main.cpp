@@ -133,7 +133,21 @@ void opcontrol() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
             score();
         }
+        
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
+            if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+                scorepiston.set_value(!scorepiston.get_value());
+}
+        }
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
+            scoremech.move(-100);
+        }
+    }
+}
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+            scoremech.move(100);
+            
+        }
 
-}}
 
 
