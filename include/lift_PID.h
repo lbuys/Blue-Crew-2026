@@ -1,3 +1,8 @@
 void lift_PID();
 void lift_movement_up();
 void lift_movement_down();
+void scoring_roller();
+void score();
+extern int liftStage;
+extern double current_height;
+extern double target_height;

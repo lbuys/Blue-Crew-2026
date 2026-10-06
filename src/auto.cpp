@@ -9,8 +9,7 @@
 #include "pros/optical.hpp"
 #include "pros/rotation.hpp"
 #include "auto.h"
-#include "Unity_Logo.c"
-#include "Red_Unity_Logo.c"
+#include "config.h"
 #include <cmath>
 #include <cstdint>
 #include <cstring>
@@ -24,6 +23,7 @@ lv_obj_t * btnSkills;
 lv_obj_t * list_group_t;
 // lv_obj_t* img = lv_img_create(lv_scr_act());  // Creates image object
 lv_obj_t* img = nullptr;
+Alliance SelectedAlliance = BLUE;
 
 void list_btn_event_c(lv_event_t *e) {
     lv_obj_t * clicked_btn = (lv_obj_t*) lv_event_get_target(e);
@@ -95,16 +95,14 @@ static void UCLogoEventCb(lv_event_t * e) { //UC logo click back event
           lv_obj_set_style_bg_color(btnLeft, lv_color_hex(0xee2a36), LV_PART_MAIN); //Red
           lv_obj_set_style_bg_color(btnRight, lv_color_hex(0xee2a36), LV_PART_MAIN);
           lv_obj_set_style_bg_color(btnSkills, lv_color_hex(0xee2a36), LV_PART_MAIN);
-          LV_IMAGE_DECLARE(Red_Unity_Logo);
-          lv_image_set_src(img, &Red_Unity_Logo); // Print RED UC logo
+          if (img != nullptr) lv_label_set_text((lv_obj_t*)img, "RED UNITY CREW");
         }
         else if (SelectedAlliance == RED){
           SelectedAlliance = BLUE;
           lv_obj_set_style_bg_color(btnLeft, lv_color_hex(0x003263), LV_PART_MAIN); //Blue
           lv_obj_set_style_bg_color(btnRight, lv_color_hex(0x003263), LV_PART_MAIN);
           lv_obj_set_style_bg_color(btnSkills, lv_color_hex(0x003263), LV_PART_MAIN);
-          LV_IMAGE_DECLARE(Unity_Logo);
-          lv_image_set_src(img, &Unity_Logo);  // Print BLUE UC logo
+          if (img != nullptr) lv_label_set_text((lv_obj_t*)img, "BLUE UNITY CREW");
         }
     }
 }
@@ -118,9 +116,8 @@ void lvgl_initialize() {
 
     // LV_IMG_DECLARE(uc);    //              at the top
     // lv_obj_t* img = lv_img_create(lv_scr_act());  // Creates image object            moved to top
-    img = lv_image_create(main_screen);
-    LV_IMAGE_DECLARE(Unity_Logo);
-    lv_image_set_src(img, &Unity_Logo);                  // Make UC logo
+    img = lv_label_create(main_screen);
+    lv_label_set_text(img, "BLUE UNITY CREW");
     lv_obj_add_flag(img, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_align(img, LV_ALIGN_TOP_RIGHT, 22, 0);
     lv_obj_set_style_transform_scale(img, 200, 0);
@@ -228,6 +225,7 @@ void lvgl_initialize() {
 
 // Returns the user data of the currently selected button
 const char* find_selected() {
+    if (leftlist == nullptr || rightlist == nullptr || skillslist == nullptr) return "loader";
     lv_obj_t* lists[] = { leftlist, rightlist, skillslist };
     for (int i = 0; i < 3; i++) {
         lv_obj_t* list = lists[i];
@@ -242,4 +240,23 @@ const char* find_selected() {
     }
     // No button was checked
     return "auton_1";
+}
+
+void show_auton_selector_screen() {
+    if (leftlist == nullptr) lvgl_initialize();
+    // The selector screen is the screen created by lvgl_initialize().
+    lv_screen_load(lv_obj_get_screen(leftlist));
+}
+
+void get_selected_auton() {
+    const char* selected = find_selected();
+    if (std::strcmp(selected, "pid_tuner") == 0) {
+        pid_tuner_run_selected_routine();
+    } else if (std::strcmp(selected, "loader") == 0) {
+        controller.print(0, 0, "Loader auton unavailable");
+    } else if (std::strcmp(selected, "loader_right") == 0) {
+        controller.print(0, 0, "Right loader unavailable");
+    } else {
+        controller.print(0, 0, "Auton unavailable");
+    }
 }

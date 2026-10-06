@@ -12,7 +12,8 @@ enum class IntakeDirection {
     Score,
     Out_Slow,
     Score_Slow,
-    Stop
+    Stop,
+    Hold
 };
 extern IntakeDirection direction;
 enum Alliance {

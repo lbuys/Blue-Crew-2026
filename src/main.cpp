@@ -3,7 +3,7 @@
 #include "auto.h"
 #include "lemlib/api.hpp"
 #include "reset.h"
-
+#include "lift_PID.h"
 
 
 /**
@@ -21,39 +21,43 @@ void lvgl_task() {
 }
 void intake_task(){
     while (true) {
-
+        pros::delay(20);
     }
 }
 void lift_PID_Task() {
     while (true) {
         lift_PID(); // Call the lift PID control function
+        pros::delay(20);
     }}
 
 void scorer_roller_task() {
     while (true) {
         scoring_roller(); // Call the scoring roller function
+        pros::delay(20);
     }
 }
 void lift_movement_up_task() {
     while (true) {
         lift_movement_up(); // Call the lift movement up function
+        pros::delay(20);
     }
 }
 void lift_movement_down_task() {
     while (true) {
         lift_movement_down(); // Call the lift movement down function
+        pros::delay(20);
     }
 }
 void initialize() {
     chassis.calibrate(); // calibrate sensors
     lvgl_initialize();
     //get_starting_position(); // set starting position based on distance sensors
-    pros::Task lvgl_task(lvgl_task);
-    pros::Task intake_task(intake_task);
-    pros::Task lift_PID_Task(lift_PID_Task);
-    pros::Task scorer_roller_task(scorer_roller_task);
-    pros::Task lift_movement_up_task(lift_movement_up_task);
-    pros::Task lift_movement_down_task(lift_movement_down_task);
+    static pros::Task lvglTask([] { lvgl_task(); });
+    static pros::Task intakeTask([] { intake_task(); });
+    static pros::Task liftPidTask([] { lift_PID_Task(); });
+    static pros::Task scorerRollerTask([] { scorer_roller_task(); });
+    static pros::Task liftUpTask([] { lift_movement_up_task(); });
+    static pros::Task liftDownTask([] { lift_movement_down_task(); });
     
 
     // thread to for brain screen and position logging
@@ -119,35 +123,38 @@ void autonomous() {
 }
 
 void opcontrol() {
+    bool lastA = false;
+    bool lastB = false;
+    bool pistonExtended = false;
 
-    bool scorepiston = false;
-	
-	 while (true) {
-        lv_timer_handler();
+    while (true) {
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
 
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)){
+        const bool aPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+        if (aPressed && !lastA) {
             score();
+            pistonExtended = true;
         }
-        
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)){
-            if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
-                scorepiston.set_value(!scorepiston.get_value());
-}
+        lastA = aPressed;
+
+        const bool bPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_B);
+        if (bPressed && !lastB) {
+            pistonExtended = !pistonExtended;
+            scorepiston.set_value(pistonExtended);
         }
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
-            scoremech.move(-100);
+        lastB = bPressed;
+
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
+            scoring_mech.move(-100);
+        } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+            scoring_mech.move(100);
+        } else {
+            scoring_mech.move(0);
         }
+        pros::delay(10);
     }
 }
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
-            scoremech.move(100);
-            
-        }
-
-
-

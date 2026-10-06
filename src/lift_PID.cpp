@@ -1,133 +1,89 @@
 #include "lift_PID.h"
 
-double liftpositions[8] = {
-    0,    // store
-    100,  // Position 1
-    200,  // Position 2
-    300,  // Position 3
-    400,  // Position 4
-    500,  // Position 5
-    600,  // Position 6
-    700   // Position 7
+#include "auto.h"
+#include "config.h"
 
-};
+#include <algorithm>
 
-double Kp = 0.5;
-double Kd = 0;
-double dt = 0.02;
+namespace {
+constexpr double liftPositions[] = {0, 100, 200, 300, 400, 500, 600, 700};
+constexpr double kP = 0.5;
+constexpr double kMaxLiftVelocity = 200.0;
+}
+
 int liftStage = 0;
-int previous_height = 0;
-liftenc.reset_position();
-double target_height = liftpositions[liftStage];
-
+double current_height = 0;
+double target_height = 0;
+IntakeDirection direction = IntakeDirection::Stop;
 
 void lift_PID() {
-    while (true) {
-        
-        // flip scoring mech out if lift is above store position
-        if (liftStage > 0){
-            score.set_value(true);
-        }
-        
-        current_height = liftenc.get_position();
-         //Calculate deltas to the current target point
-        double delta_height = target_height - current_height;
+    current_height = liftenc.get_position();
+    const double error = target_height - current_height;
+    const double velocity = std::clamp(kP * error, -kMaxLiftVelocity, kMaxLiftVelocity);
 
-        double derivative =(current_height - previous_height) / dt;
-
-        double speed = Kp * delta_height + Kd * derivative;
-
-        // Set the lift motor speed
-        lift_11W.move_velocity(speed);
-        lift_half.move_velocity(speed);
-
-        previous_height = current_height;
-        delay(20);  // Delay for 20 milliseconds 
-
-}}
-
-
+    lift_11W.move_velocity(velocity);
+    lift_half.move_velocity(velocity);
+    // Keep the scoring mechanism safely stowed at the bottom stage.
+    if (liftStage == 0) scorepiston.set_value(false);
+}
 
 void lift_movement_up() {
-
-    bool lastPressed = false;
-
-
-    uint32_t lastPressTime = 0;
-    const uint32_t timeout = 1000;
-    
-    while (true) {
-        
-        bool pressed =
-            master.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
-
-        if (pressed && !lastPressed) {
-
-            liftStage++;
-
-            if (liftStage > 7)
-                liftStage = 7;
-
-            target_height = liftpositions[liftStage];
-        }
-
-        lastPressed = pressed;
-
-        pros::delay(10);
+    static bool wasPressed = false;
+    const bool pressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
+    if (pressed && !wasPressed) {
+        liftStage = std::min(liftStage + 1, 7);
+        target_height = liftPositions[liftStage];
     }
+    wasPressed = pressed;
 }
 
 void lift_movement_down() {
-
-    bool lastPressed = false;
-
-
-    uint32_t lastPressTime = 0;
-    const uint32_t timeout = 1000;
-    
-    while (true) {
-        
-        bool pressed =
-            master.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
-
-        if (pressed && !lastPressed) {
-
-            liftStage--;
-
-            if (liftStage < 0)
-                liftStage = 0;
-
-            target_height = liftpositions[liftStage];
-        }
-
-        lastPressed = pressed;
-
-        pros::delay(10);
+    static bool wasPressed = false;
+    const bool pressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+    if (pressed && !wasPressed) {
+        liftStage = std::max(liftStage - 1, 0);
+        target_height = liftPositions[liftStage];
     }
+    wasPressed = pressed;
 }
+
 void scoring_roller() {
-    while (true) {
-        if (direction == score_direction::score){
+    switch (direction) {
+        case IntakeDirection::Score:
             scoring_mech.move_velocity(100);
-        }
-        else if (direction == score_direction::hold){
+            break;
+        case IntakeDirection::Score_Slow:
+            scoring_mech.move_velocity(50);
+            break;
+        case IntakeDirection::In:
+            scoring_mech.move_velocity(100);
+            break;
+        case IntakeDirection::Out:
             scoring_mech.move_velocity(-100);
-        }
-        else if (direction == score_direction::off){
+            break;
+        case IntakeDirection::Out_Slow:
+            scoring_mech.move_velocity(-50);
+            break;
+        case IntakeDirection::Hold:
+            scoring_mech.move_velocity(-20);
+            break;
+        case IntakeDirection::Stop:
             scoring_mech.move_velocity(0);
-        }
-        pros::delay(50);
+            break;
     }
 }
-void score()
-{ 
-    scorepiston.set_value(false);
-    score_direction::score;
-    pros::delay(500);
-    diretion = score_direction::hold;
-    target_height = current_height + 50;
-    pros::delay(50);
-    scorepiston.set_value(true);
-    direction = score_direction::off;
 
-    }
+void score() {
+    scorepiston.set_value(false);
+    direction = IntakeDirection::Score;
+    pros::delay(500);
+
+    direction = IntakeDirection::Hold;
+    current_height = liftenc.get_position();
+    target_height = current_height + 50;
+    liftStage = std::min(liftStage + 1, 7);
+    pros::delay(50);
+
+    scorepiston.set_value(true);
+    direction = IntakeDirection::Stop;
+}
