@@ -1,4 +1,6 @@
 void lift_PID();
+void lift_controller_initialize();
+void lift_control_task();
 void lift_movement_up();
 void lift_movement_down();
 void scoring_roller();

@@ -9,15 +9,15 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Motors and Pistons
-pros::Motor lift_11W(11, pros::MotorGearset::blue, pros::MotorUnits::degrees);
+pros::Motor lift_11W(-11, pros::MotorGearset::blue, pros::MotorUnits::degrees);
 pros::Motor lift_half(-1, pros::MotorGearset::green, pros::MotorUnits::degrees);
 pros::Motor scoring_mech(6, pros::MotorGearset::green, pros::MotorUnits::degrees);
-pros::adi::DigitalOut scorepiston('A');
+pros::adi::DigitalOut scorepiston({1, 'A'});
 
 
 
 // Motor groups
-pros::MotorGroup leftMotors({3,4, 5}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-3,-4, -5}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({8, 9,10}, pros::MotorGearset::blue);
 
 
@@ -29,10 +29,10 @@ pros::Distance right_sensor(23);
 pros::Rotation liftenc(12);
 
 // Tracking Wheels
-pros::Rotation verticalEnc(-6);
-pros::Rotation horizontalEnc(7);
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 6.5);
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -6.5);
+pros::Rotation verticalEnc(17);
+//pros::Rotation horizontalEnc(7);
+lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 1);
+//lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -6.5);
 
 // Drivetrain Settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups
@@ -44,9 +44,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups
 );
 
 // Lateral Motion Controller
-lemlib::ControllerSettings linearController(3.55, // proportional gain (kP)
-                                            0, // integral gain (kI)
-                                            .5, // derivative gain (kD)
+lemlib::ControllerSettings linearController(30, // proportional gain (kP)
+                                            .1, // integral gain (kI)
+                                            2, // derivative gain (kD)
                                             3, // anti windup
                                             0.5, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -56,9 +56,9 @@ lemlib::ControllerSettings linearController(3.55, // proportional gain (kP)
 );
 
 // Angular Motion Controller
-lemlib::ControllerSettings angularController(.8, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             .12, // derivative gain (kD)
+lemlib::ControllerSettings angularController(10, // proportional gain (kP)
+                                             .1, // integral gain (kI)
+                                             2, // derivative gain (kD)
                                              3, // anti windup
                                              2, // small error range, in degrees
                                              90, // small error range timeout, in milliseconds
@@ -70,7 +70,7 @@ lemlib::ControllerSettings angularController(.8, // proportional gain (kP)
 // Sensors For Odometry
 lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
                             nullptr,
-                            &horizontal, // horizontal tracking wheel
+                            nullptr, // horizontal tracking wheel
                             nullptr,
                             &imu // inertial sensor
 );

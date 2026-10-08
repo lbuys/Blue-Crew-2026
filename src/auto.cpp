@@ -204,7 +204,7 @@ void lvgl_initialize() {
     ██╔══██║██║   ██║   ██║   ██║   ██║██║╚██╗██║    ██╔══██╗██║   ██║   ██║      ██║   ██║   ██║██║╚██╗██║╚════██║
     ██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║ ╚████║    ██████╔╝╚██████╔╝   ██║      ██║   ╚██████╔╝██║ ╚████║███████║
     ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═══╝    ╚═════╝  ╚═════╝    ╚═╝      ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚══════╝                        */
-    create_btn(leftlist, "loader");
+    create_btn(leftlist, "toggle");
     create_btn(rightlist,"loader_right");
     create_btn(rightlist, "low_middle");
     create_btn(leftlist, "high_middle");
@@ -250,7 +250,9 @@ void show_auton_selector_screen() {
 
 void get_selected_auton() {
     const char* selected = find_selected();
-    if (std::strcmp(selected, "pid_tuner") == 0) {
+    if (std::strcmp(selected, "toggle") == 0) {
+        toggle();
+    } else if (std::strcmp(selected, "pid_tuner") == 0) {
         pid_tuner_run_selected_routine();
     } else if (std::strcmp(selected, "loader") == 0) {
         controller.print(0, 0, "Loader auton unavailable");

@@ -24,40 +24,26 @@ void intake_task(){
         pros::delay(20);
     }
 }
-void lift_PID_Task() {
-    while (true) {
-        lift_PID(); // Call the lift PID control function
-        pros::delay(20);
-    }}
-
 void scorer_roller_task() {
     while (true) {
         scoring_roller(); // Call the scoring roller function
         pros::delay(20);
     }
 }
-void lift_movement_up_task() {
-    while (true) {
-        lift_movement_up(); // Call the lift movement up function
-        pros::delay(20);
-    }
-}
-void lift_movement_down_task() {
-    while (true) {
-        lift_movement_down(); // Call the lift movement down function
-        pros::delay(20);
-    }
-}
 void initialize() {
-    chassis.calibrate(); // calibrate sensors
+    // Load and refresh the selector immediately so it is visible during
+    // pre-autonomous sensor calibration.
     lvgl_initialize();
-    //get_starting_position(); // set starting position based on distance sensors
     static pros::Task lvglTask([] { lvgl_task(); });
+
+    chassis.calibrate(); // calibrate sensors after the selector is already running
+    lift_controller_initialize();
+    //get_starting_position(); // set starting position based on distance sensors
     static pros::Task intakeTask([] { intake_task(); });
-    static pros::Task liftPidTask([] { lift_PID_Task(); });
+    static pros::Task liftControlTask([] { lift_control_task(); });
     static pros::Task scorerRollerTask([] { scorer_roller_task(); });
-    static pros::Task liftUpTask([] { lift_movement_up_task(); });
-    static pros::Task liftDownTask([] { lift_movement_down_task(); });
+
+
     
 
     // thread to for brain screen and position logging
@@ -98,7 +84,10 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+    // PROS calls this during pre-autonomous when competition control is active.
+    show_auton_selector_screen();
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task

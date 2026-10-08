@@ -7,12 +7,13 @@
 
 
 
-extern void place_matchload(){
-    controller.print(0, 0, "Place matchload             ");
-    chassis.setPose(0, 0, 0);
-    //drive to goal
-    chassis.moveToPoint(-5,18,2000);
-    liftStage = 1; 
-    score();
 
+extern void toggle(){
+    controller.print(0, 0, "Toggle             ");
+    chassis.setPose(0, 0, 0);
+    //Rotate Toggle
+    chassis.moveToPoint(0,2,2000);
+    chassis.moveToPoint(0,0,2000, {.forwards = false});
+    chassis.moveToPoint(0,2,2000);
+    chassis.moveToPoint(0,0,2000, {.forwards = false});
     }

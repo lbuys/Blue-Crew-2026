@@ -5,6 +5,7 @@
 
 //Shared Declarations
 void get_selected_auton();
+void toggle();
 const char* find_selected();
 enum class IntakeDirection {
     In,
