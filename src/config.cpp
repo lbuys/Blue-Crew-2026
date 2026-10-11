@@ -11,7 +11,7 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 // Motors and Pistons
 pros::Motor lift_11W(-11, pros::MotorGearset::blue, pros::MotorUnits::degrees);
 pros::Motor lift_half(-1, pros::MotorGearset::green, pros::MotorUnits::degrees);
-pros::Motor scoring_mech(6, pros::MotorGearset::green, pros::MotorUnits::degrees);
+pros::Motor scoring_mech(7, pros::MotorGearset::green, pros::MotorUnits::degrees);
 pros::adi::DigitalOut scorepiston({1, 'A'});
 
 
@@ -37,16 +37,16 @@ lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 1);
 // Drivetrain Settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups
                               &rightMotors, // right motor group
-                              10.344, // track width
+                              11.75, // track width
                               lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
-                              480, // drivetrain rpm
+                              450, // drivetrain rpm
                               2 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
 // Lateral Motion Controller
-lemlib::ControllerSettings linearController(30, // proportional gain (kP)
-                                            .1, // integral gain (kI)
-                                            2, // derivative gain (kD)
+lemlib::ControllerSettings linearController(5, // proportional gain (kP)
+                                            .1,// integral gain (kI)
+                                            20, // derivative gain (kD)
                                             3, // anti windup
                                             0.5, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -56,9 +56,9 @@ lemlib::ControllerSettings linearController(30, // proportional gain (kP)
 );
 
 // Angular Motion Controller
-lemlib::ControllerSettings angularController(10, // proportional gain (kP)
-                                             .1, // integral gain (kI)
-                                             2, // derivative gain (kD)
+lemlib::ControllerSettings angularController(0, // proportional gain (kP)
+                                             0, // integral gain (kI)
+                                             0, // derivative gain (kD)
                                              3, // anti windup
                                              2, // small error range, in degrees
                                              90, // small error range timeout, in milliseconds
