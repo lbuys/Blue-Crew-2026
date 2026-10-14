@@ -35,6 +35,7 @@ void initialize() {
     // pre-autonomous sensor calibration.
     lvgl_initialize();
     static pros::Task lvglTask([] { lvgl_task(); });
+    
     chassis.calibrate(); // calibrate sensors after the selector is already running
     //lift_controller_initialize();
     //get_starting_position(); // set starting position based on distance sensors
