@@ -205,7 +205,7 @@ void lvgl_initialize() {
     ██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║ ╚████║    ██████╔╝╚██████╔╝   ██║      ██║   ╚██████╔╝██║ ╚████║███████║
     ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═══╝    ╚═════╝  ╚═════╝    ╚═╝      ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚══════╝                        */
     create_btn(leftlist, "toggle");
-    create_btn(rightlist,"loader_right");
+    //create_btn(rightlist,"loader_right");
     create_btn(rightlist, "low_middle");
     create_btn(leftlist, "high_middle");
     create_btn(skillslist, "skills_2");

@@ -34,13 +34,18 @@ void initialize() {
     // Load and refresh the selector immediately so it is visible during
     // pre-autonomous sensor calibration.
     lvgl_initialize();
-    static pros::Task lvglTask([] { lvgl_task(); });
+    //static pros::Task lvglTask([] { lvgl_task(); });
+    static pros::Task lvglTask([] { 
+        lvgl_task(); 
+    }, "LVGL Task");
     
     chassis.calibrate(); // calibrate sensors after the selector is already running
-    //lift_controller_initialize();
+    lift_controller_initialize();
     //get_starting_position(); // set starting position based on distance sensors
     //static pros::Task intakeTask([] { intake_task(); });
-    //static pros::Task liftControlTask([] { lift_control_task(); });
+    static pros::Task liftControlTask([] { 
+        lift_control_task(); 
+    }, "Lift Control Task");
     //static pros::Task scorerRollerTask([] { scorer_roller_task(); });
 
 
@@ -73,7 +78,9 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {
+    lift_set_manual_velocity(0);
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -101,17 +108,19 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+    lift_set_manual_velocity(0);
 
     if (SelectedAlliance == BLUE) {
-        controller.print(0, 0, "BLUE");
+        controller.print(0,0,  "BLUE");
     }
     else if (SelectedAlliance == RED){
-        controller.print(0, 0, "RED");
+        controller.print(0, 0,  "RED");
     }
     get_selected_auton();
 }
 
 void opcontrol() {
+    lift_set_manual_velocity(0);
     bool lastA = false;
     bool lastB = false;
     bool pistonExtended = false;
@@ -129,7 +138,6 @@ void opcontrol() {
             pistonExtended = true;
         }
         lastA = aPressed;
-
         const bool bPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_B);
         if (bPressed && !lastB) {
             pistonExtended = !pistonExtended;
@@ -144,6 +152,15 @@ void opcontrol() {
         } else {
             scoring_mech.move(0);
         }
+
+        // R1/R2 select PID stages; hold L2 with either button for manual backup.
+        const bool manualMode = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
+        const bool liftUp = manualMode && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
+        const bool liftDown = manualMode && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+        const int manualLiftVelocity = liftUp == liftDown ? 0 : (liftUp ? 100 : -100);
+        lift_set_manual_velocity(manualLiftVelocity);
+
         pros::delay(10);
     }
 }
+

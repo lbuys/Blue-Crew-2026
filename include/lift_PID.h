@@ -1,6 +1,8 @@
 void lift_PID();
 void lift_controller_initialize();
 void lift_control_task();
+void lift_set_manual_velocity(int velocity);
+void lift_set_target_degrees(double targetDegrees);
 void lift_movement_up();
 void lift_movement_down();
 void scoring_roller();
