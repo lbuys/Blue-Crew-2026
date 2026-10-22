@@ -40,12 +40,12 @@ void initialize() {
     }, "LVGL Task");
     
     chassis.calibrate(); // calibrate sensors after the selector is already running
-    lift_controller_initialize();
+    //lift_controller_initialize();
     //get_starting_position(); // set starting position based on distance sensors
     //static pros::Task intakeTask([] { intake_task(); });
-    static pros::Task liftControlTask([] { 
-        lift_control_task(); 
-    }, "Lift Control Task");
+    //static pros::Task liftControlTask([] { 
+      //  lift_control_task(); 
+    //}, "Lift Control Task");
     //static pros::Task scorerRollerTask([] { scorer_roller_task(); });
 
 
@@ -161,6 +161,19 @@ void opcontrol() {
         lift_set_manual_velocity(manualLiftVelocity);
 
         pros::delay(10);
+
+        const bool yPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
+
+        if (yPressed){
+            MatchLoad.move_velocity(600);
+            scoring_mech.move_velocity(600);
+
+    }
+    if (liftStage == 0){
+        scorepiston.set_value(false);
+    }
+    else {scorepiston.set_value(true);
     }
 }
 
+}

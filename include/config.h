@@ -16,6 +16,7 @@ extern pros::MotorGroup rightMotors;
 extern pros::Motor lift_11W;
 extern pros::Motor lift_half;
 extern pros::Motor scoring_mech;
+extern pros::Motor MatchLoad;
 extern pros::adi::DigitalOut scorepiston;
 extern pros::Rotation liftenc;
 

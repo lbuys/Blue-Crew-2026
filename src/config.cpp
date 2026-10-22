@@ -12,7 +12,8 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 pros::Motor lift_11W(-11, pros::MotorGearset::blue, pros::MotorUnits::degrees);
 pros::Motor lift_half(-1, pros::MotorGearset::green, pros::MotorUnits::degrees);
 pros::Motor scoring_mech(7, pros::MotorGearset::green, pros::MotorUnits::degrees);
-pros::adi::DigitalOut scorepiston({1, 'A'});
+pros::Motor MatchLoad(4, pros::MotorGearset::blue, pros::MotorUnits::degrees);
+pros::adi::DigitalOut scorepiston('A');
 
 
 
