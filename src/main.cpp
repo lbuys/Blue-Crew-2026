@@ -34,26 +34,23 @@ void initialize() {
     // Load and refresh the selector immediately so it is visible during
     // pre-autonomous sensor calibration.
     lvgl_initialize();
-    //static pros::Task lvglTask([] { lvgl_task(); });
-    static pros::Task lvglTask([] { 
+        static pros::Task lvglTask([] { 
         lvgl_task(); 
     }, "LVGL Task");
     
     chassis.calibrate(); // calibrate sensors after the selector is already running
-    //lift_controller_initialize();
+    lift_controller_initialize();
     //get_starting_position(); // set starting position based on distance sensors
     //static pros::Task intakeTask([] { intake_task(); });
-    //static pros::Task liftControlTask([] { 
-      //  lift_control_task(); 
-    //}, "Lift Control Task");
+    static pros::Task liftControlTask([] { 
+        lift_control_task(); 
+    }, "Lift Control Task");
     //static pros::Task scorerRollerTask([] { scorer_roller_task(); });
 
 
-    
-
      //thread to for brain screen and position logging
     //pros::lcd::initialize(); // initialize brain screen
-     //pros::Task screenTask([&]() {
+    // pros::Task screenTask([&]() {
          //while (true) {
              // print robot location to the brain screen
              //pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
@@ -124,6 +121,7 @@ void opcontrol() {
     bool lastA = false;
     bool lastB = false;
     bool pistonExtended = false;
+    bool score = true;
 
     while (true) {
         // get joystick positions
@@ -132,12 +130,12 @@ void opcontrol() {
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
 
-        const bool aPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
-        if (aPressed && !lastA) {
-            score();
-            pistonExtended = true;
-        }
-        lastA = aPressed;
+        //const bool aPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+        //if (aPressed && !lastA) {
+            //score();
+            //pistonExtended = true;
+        //}
+        //lastA = aPressed;
         const bool bPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_B);
         if (bPressed && !lastB) {
             pistonExtended = !pistonExtended;
@@ -145,13 +143,28 @@ void opcontrol() {
         }
         lastB = bPressed;
 
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
-            scoring_mech.move(-100);
-        } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-            scoring_mech.move(100);
-        } else {
-            scoring_mech.move(0);
-        }
+      //  if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
+          //  scoring_mech.move(-100);
+        //} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+            //scoring_mech.move(100);
+        //} else {
+          //  scoring_mech.move(0);
+        //}
+
+       // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){//down
+         //   lift_11W.move_velocity(127);
+           // lift_half.move_velocity(127);
+        //}
+        //else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {//up
+          //  lift_11W.move_velocity(-127);
+           // lift_half.move_velocity(-127);
+        //}
+        //else{
+          //  lift_11W.brake();
+            //lift_half.brake();
+        //}
+
+        
 
         // R1/R2 select PID stages; hold L2 with either button for manual backup.
         const bool manualMode = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
@@ -160,20 +173,41 @@ void opcontrol() {
         const int manualLiftVelocity = liftUp == liftDown ? 0 : (liftUp ? 100 : -100);
         lift_set_manual_velocity(manualLiftVelocity);
 
-        pros::delay(10);
+       pros::delay(10);
 
         const bool yPressed = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
 
-        if (yPressed){
-            MatchLoad.move_velocity(600);
-            scoring_mech.move_velocity(600);
-
     }
-    if (liftStage == 0){
+    //if (liftStage == 0){
+      //  scorepiston.set_value(false);
+    //}
+    //else {scorepiston.set_value(true);
+   // }
+
+if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
+    if (score) {
+        scoring_mech.move_velocity(-600);
+        pros::delay(100);  // Allow motor to start holding
+        scorepiston.set_value(true);
+        score = false;
+    }
+    else {
         scorepiston.set_value(false);
+        score = true;
+        scoring_mech.move_velocity(0);
     }
-    else {scorepiston.set_value(true);
-    }
+
+    pros::delay(250); // Button debounce
 }
 
+if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+    scoring_mech.move_velocity(600);
 }
+else if (!score) {
+    scoring_mech.move_velocity(-600);
+}
+else {
+    scoring_mech.move_velocity(0);
+}
+
+pros::delay(20);}

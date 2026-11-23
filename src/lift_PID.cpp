@@ -11,8 +11,8 @@ namespace {
 // Replace these example values with readings taken at each desired height.
 constexpr double liftPositionsDegrees[] = {0, 100, 200, 300, 400, 500, 600, 700};
 constexpr double kP = 0.8;
-constexpr double kI = 0.02;
-constexpr double kD = 0.05;
+constexpr double kI = 0.0;
+constexpr double kD = 0.0;
 constexpr double kMaxLiftVelocity = 200.0;
 constexpr double kLiftTolerance = 2.0;
 constexpr double kLoopSeconds = 0.02;
@@ -22,8 +22,10 @@ int manualLiftVelocity = 0;
 pros::Mutex liftStateMutex;
 
 void display_lift_stage() {
-    controller.print(1, 0, "Stage: %d", liftStage);
-    controller.print(2, 0, "Sensor: %7.1f", current_height);
+controller.print(1, 0, "C%.0f T%.0f E%.0f",
+                 current_height,
+                 target_height,
+                 target_height - current_height);
 }
 }
 
@@ -35,6 +37,7 @@ IntakeDirection direction = IntakeDirection::Stop;
 void lift_controller_initialize() {
     lift_11W.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lift_half.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    liftenc.reset_position();
     liftSensorReady = false;
     liftStage = 0;
     current_height = 0;

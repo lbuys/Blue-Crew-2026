@@ -208,7 +208,7 @@ void lvgl_initialize() {
     //create_btn(rightlist,"loader_right");
     create_btn(rightlist, "low_middle");
     create_btn(leftlist, "high_middle");
-    create_btn(skillslist, "skills_2");
+    create_btn(leftlist, "skills");
     create_btn(skillslist, "pid_tuner");
     // create_btn(rightlist, "wp");
 
@@ -252,6 +252,8 @@ void get_selected_auton() {
     const char* selected = find_selected();
     if (std::strcmp(selected, "toggle") == 0) {
         toggle();
+    } else if (std::strcmp(selected, "skills") == 0){
+        skills();
     } else if (std::strcmp(selected, "pid_tuner") == 0) {
         pid_tuner_run_selected_routine();
     } else if (std::strcmp(selected, "loader") == 0) {
@@ -261,4 +263,5 @@ void get_selected_auton() {
     } else {
         controller.print(0, 0, "Auton unavailable");
     }
+
 }

@@ -23,7 +23,7 @@ enum Alliance {
 };
 extern Alliance SelectedAlliance;
 void lvgl_initialize();
-void intake(const std::string& direction);
+//void intake(const std::string& direction);
 void loader();
 void loader_right();
 void low_middle();
@@ -33,6 +33,7 @@ void skills();
 void skills_2();
 void wp();
 void color_sort();
+void toggle();
 extern bool color_sorting;
 void pid_tuner_start(double setpointX, double setpointY);
 void pid_tuner_update_setpoint(double setpointX, double setpointY);

@@ -9,10 +9,10 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Motors and Pistons
-pros::Motor lift_11W(-11, pros::MotorGearset::blue, pros::MotorUnits::degrees);
-pros::Motor lift_half(-1, pros::MotorGearset::green, pros::MotorUnits::degrees);
-pros::Motor scoring_mech(7, pros::MotorGearset::green, pros::MotorUnits::degrees);
-pros::Motor MatchLoad(4, pros::MotorGearset::blue, pros::MotorUnits::degrees);
+pros::Motor lift_11W(-13, pros::MotorGearset::green, pros::MotorUnits::degrees);
+pros::Motor lift_half(-11, pros::MotorGearset::green, pros::MotorUnits::degrees);
+//pros::Motor scoring_mech(1, pros::MotorGearset::green, pros::MotorUnits::degrees);
+//pros::Motor MatchLoad(4, pros::MotorGearset::blue, pros::MotorUnits::degrees);
 pros::adi::DigitalOut scorepiston('A');
 
 
@@ -27,13 +27,13 @@ pros::Imu imu(19);
 pros::Distance front_sensor(20);
 pros::Distance left_sensor(22);
 pros::Distance right_sensor(23);
-pros::Rotation liftenc(12);
+pros::Rotation liftenc(-12);
 
 // Tracking Wheels
 pros::Rotation verticalEnc(17);
-//pros::Rotation horizontalEnc(7);
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 1);
-//lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -6.5);
+pros::Rotation horizontalEnc(7);
+lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, -.5);
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -6.5);
 
 // Drivetrain Settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups
@@ -71,7 +71,7 @@ lemlib::ControllerSettings angularController(0, // proportional gain (kP)
 // Sensors For Odometry
 lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
                             nullptr,
-                            nullptr, // horizontal tracking wheel
+                            &horizontal, // horizontal tracking wheel
                             nullptr,
                             &imu // inertial sensor
 );
