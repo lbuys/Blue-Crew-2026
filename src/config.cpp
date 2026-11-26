@@ -33,7 +33,7 @@ pros::Rotation liftenc(-12);
 pros::Rotation verticalEnc(17);
 pros::Rotation horizontalEnc(7);
 lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, -.5);
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -6.5);
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, .5);
 
 // Drivetrain Settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups
@@ -45,9 +45,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor groups
 );
 
 // Lateral Motion Controller
-lemlib::ControllerSettings linearController(5, // proportional gain (kP)
-                                            .1,// integral gain (kI)
-                                            20, // derivative gain (kD)
+lemlib::ControllerSettings linearController(8.5, // proportional gain (kP)
+                                            .04,// integral gain (kI)
+                                            31, // derivative gain (kD)
                                             3, // anti windup
                                             0.5, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -57,9 +57,9 @@ lemlib::ControllerSettings linearController(5, // proportional gain (kP)
 );
 
 // Angular Motion Controller
-lemlib::ControllerSettings angularController(0, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             0, // derivative gain (kD)
+lemlib::ControllerSettings angularController(3.5, // proportional gain (kP)
+                                             .04, // integral gain (kI)
+                                             25, // derivative gain (kD)
                                              3, // anti windup
                                              2, // small error range, in degrees
                                              90, // small error range timeout, in milliseconds

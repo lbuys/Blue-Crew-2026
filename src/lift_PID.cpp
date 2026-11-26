@@ -17,7 +17,12 @@ constexpr double kMaxLiftVelocity = 200.0;
 constexpr double kLiftTolerance = 2.0;
 constexpr double kLoopSeconds = 0.02;
 constexpr double kIntegralLimit = 500.0;
+// If the lift is commanded but the encoder does not move, or moves the wrong
+// way, stop the PID instead of letting it drive against the mechanism.
+constexpr int kFeedbackCheckCycles = 50; // 1 second at the 20 ms control period
+constexpr double kMinimumFeedbackMovement = 0.15; // degrees
 bool liftSensorReady = false;
+bool liftFeedbackFault = false;
 int manualLiftVelocity = 0;
 pros::Mutex liftStateMutex;
 
@@ -39,6 +44,7 @@ void lift_controller_initialize() {
     lift_half.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     liftenc.reset_position();
     liftSensorReady = false;
+    liftFeedbackFault = false;
     liftStage = 0;
     current_height = 0;
     target_height = 0;
@@ -51,6 +57,9 @@ void lift_PID() {
     static double previousError = 0;
     static double previousTarget = 0;
     static bool hasPreviousError = false;
+    static int feedbackCheckCycles = 0;
+    static double feedbackStartPosition = 0;
+    static double feedbackStartError = 0;
     const std::int32_t sensorPosition = liftenc.get_position();
     if (sensorPosition == PROS_ERR) {
         // Never feed a PROS error sentinel into the PID calculation.
@@ -58,6 +67,7 @@ void lift_PID() {
         lift_half.move_velocity(0);
         integral = 0;
         hasPreviousError = false;
+        liftFeedbackFault = true;
         return;
     }
 
@@ -70,10 +80,16 @@ void lift_PID() {
     }
 
     liftStateMutex.take();
-    const double error = target_height - current_height;
-    const int stage = liftStage;
     const double target = target_height;
+    const double error = target - current_height;
+    const int stage = liftStage;
     liftStateMutex.give();
+
+    if (liftFeedbackFault) {
+        lift_11W.move_velocity(0);
+        lift_half.move_velocity(0);
+        return;
+    }
 
     if (!hasPreviousError || target != previousTarget) {
         integral = 0;
@@ -101,9 +117,31 @@ void lift_PID() {
     }
     previousError = error;
 
+    // Check the encoder against actual commanded motion. A valid but frozen or
+    // reversed sensor otherwise leaves the controller driving forever.
+    if (std::abs(velocity) > 20) {
+        if (feedbackCheckCycles == 0) {
+            feedbackStartPosition = current_height;
+            feedbackStartError = error;
+        }
+        if (++feedbackCheckCycles >= kFeedbackCheckCycles) {
+            const double movement = current_height - feedbackStartPosition;
+            const double errorChange = std::abs(error) - std::abs(feedbackStartError);
+            if (std::abs(movement) < kMinimumFeedbackMovement || errorChange > 5.0) {
+                liftFeedbackFault = true;
+                velocity = 0;
+                integral = 0;
+            }
+            feedbackCheckCycles = 0;
+        }
+    } else {
+        feedbackCheckCycles = 0;
+    }
+
     lift_11W.move_velocity(velocity);
     lift_half.move_velocity(velocity);
-    display_lift_stage();
+    if (liftFeedbackFault) controller.print(1, 0, "LIFT SENSOR FAULT");
+    else display_lift_stage();
     // Keep the scoring mechanism safely stowed at the bottom stage.
     if (stage == 0) scorepiston.set_value(false);
 }
@@ -160,9 +198,6 @@ void lift_control_task() {
 
             lift_PID(); // PID owns motor output during normal operation.
         }
-        // R1/R2 select preset stages; hold L2 with them for manual backup.
-        lift_movement_up();
-        lift_movement_down();
         manualWasActive = manualActive;
         pros::delay(20);
     }

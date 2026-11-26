@@ -34,34 +34,33 @@ void initialize() {
     // Load and refresh the selector immediately so it is visible during
     // pre-autonomous sensor calibration.
     lvgl_initialize();
-        static pros::Task lvglTask([] { 
+    static pros::Task lvglTask([] {
         lvgl_task(); 
     }, "LVGL Task");
-    
     chassis.calibrate(); // calibrate sensors after the selector is already running
     lift_controller_initialize();
     //get_starting_position(); // set starting position based on distance sensors
     //static pros::Task intakeTask([] { intake_task(); });
-    static pros::Task liftControlTask([] { 
-        lift_control_task(); 
-    }, "Lift Control Task");
+    //static pros::Task liftControlTask([] {
+      //  lift_control_task();
+    //}, "Lift Control Task");
     //static pros::Task scorerRollerTask([] { scorer_roller_task(); });
 
 
      //thread to for brain screen and position logging
     //pros::lcd::initialize(); // initialize brain screen
-    // pros::Task screenTask([&]() {
-         //while (true) {
-             // print robot location to the brain screen
-             //pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-             //pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+      //   pros::Task screenTask([&]() {
+        // while (true) {
+              //print robot location to the brain screen
+          //pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            //pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            //pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
              // log position telemetry
-          //   lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+             //lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
         //     // delay to save resources
-      //       pros::delay(50);
-    //     }
-  //   });
+             //pros::delay(50);
+        // }
+     //});
 }
 
 // get a path used for pure pursuit
@@ -122,7 +121,7 @@ void opcontrol() {
     bool lastB = false;
     bool pistonExtended = false;
     bool score = true;
-
+    
     while (true) {
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -151,27 +150,30 @@ void opcontrol() {
           //  scoring_mech.move(0);
         //}
 
-       // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){//down
-         //   lift_11W.move_velocity(127);
-           // lift_half.move_velocity(127);
-        //}
-        //else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {//up
-          //  lift_11W.move_velocity(-127);
-           // lift_half.move_velocity(-127);
-        //}
-        //else{
-          //  lift_11W.brake();
-            //lift_half.brake();
-        //}
+       if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){//down
+            lift_11W.move_velocity(127);
+            lift_half.move_velocity(127);
+        }
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {//up
+            lift_11W.move_velocity(-127);
+            lift_half.move_velocity(-127);
+        }
+        else{
+            lift_11W.brake();
+            lift_half.brake();
+        }
 
         
 
         // R1/R2 select PID stages; hold L2 with either button for manual backup.
-        const bool manualMode = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
-        const bool liftUp = manualMode && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
-        const bool liftDown = manualMode && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
-        const int manualLiftVelocity = liftUp == liftDown ? 0 : (liftUp ? 100 : -100);
-        lift_set_manual_velocity(manualLiftVelocity);
+        //const bool manualMode = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2);
+        //const bool liftUp = manualMode && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1);
+        //const bool liftDown = manualMode && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+        //const int manualLiftVelocity = liftUp == liftDown ? 0 : (liftUp ? 100 : -100);
+        //lift_set_manual_velocity(manualLiftVelocity);
+        // Keep preset selection in the driver loop; the lift task only runs PID.
+        //lift_movement_up();
+        //lift_movement_down();
 
        pros::delay(10);
 
@@ -184,21 +186,6 @@ void opcontrol() {
     //else {scorepiston.set_value(true);
    // }
 
-if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
-    if (score) {
-        scoring_mech.move_velocity(-600);
-        pros::delay(100);  // Allow motor to start holding
-        scorepiston.set_value(true);
-        score = false;
-    }
-    else {
-        scorepiston.set_value(false);
-        score = true;
-        scoring_mech.move_velocity(0);
-    }
-
-    pros::delay(250); // Button debounce
-}
 
 if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
     scoring_mech.move_velocity(600);
